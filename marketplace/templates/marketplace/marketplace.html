@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace – MicroLearn</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #f7f5f1;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --card-bg: #ffffff;
+        --radius: 14px;
+        --shadow: 0 2px 16px rgba(13, 13, 13, 0.07);
+        --shadow-lg: 0 8px 40px rgba(13, 13, 13, 0.12);
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* NAV */
+      .ml-nav {
+        background: rgba(250, 248, 244, 0.94);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 0.7rem 0;
+      }
+      .ml-nav .navbar-brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        color: var(--ink);
+        letter-spacing: -0.5px;
+      }
+      .ml-nav .navbar-brand span {
+        color: var(--saffron);
+      }
+      .ml-nav .nav-link {
+        color: var(--ink);
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 0.35rem 0.8rem !important;
+        border-radius: 6px;
+      }
+      .ml-nav .nav-link:hover {
+        background: var(--saffron-light);
+        color: var(--saffron);
+      }
+      .btn-nav-signup {
+        background: var(--saffron);
+        color: #fff !important;
+        border-radius: 50px;
+        padding: 0.35rem 1.2rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+
+      /* PAGE HEADER */
+      .marketplace-header {
+        background: var(--ink);
+        color: #fff;
+        padding: 50px 0 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      .marketplace-header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 80% at 80% 50%,
+          rgba(249, 115, 22, 0.2),
+          transparent
+        );
+      }
+      .marketplace-header h1 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+      }
+      .marketplace-header p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+      }
+
+      /* SEARCH BAR */
+      .search-sticky {
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 0;
+        position: sticky;
+        top: 62px;
+        z-index: 90;
+      }
+      .search-input-group {
+        background: var(--paper);
+        border: 1.5px solid var(--border);
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        padding: 0.4rem 0.5rem 0.4rem 1.1rem;
+        gap: 0.5rem;
+      }
+      .search-input-group input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 0.9rem;
+        flex: 1;
+        font-family: "DM Sans", sans-serif;
+      }
+      .search-input-group .btn-srch {
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.45rem 1.1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* LAYOUT */
+      .marketplace-body {
+        padding: 2rem 0;
+      }
+      .filter-sidebar {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        position: sticky;
+        top: 130px;
+      }
+      .filter-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 1.1rem;
+      }
+      .filter-section {
+        margin-bottom: 1.4rem;
+      }
+      .filter-section-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.6rem;
+      }
+      .filter-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.45rem;
+        cursor: pointer;
+      }
+      .filter-checkbox input {
+        accent-color: var(--saffron);
+        cursor: pointer;
+      }
+      .filter-checkbox label {
+        font-size: 0.85rem;
+        cursor: pointer;
+        flex: 1;
+      }
+      .filter-checkbox .count {
+        font-size: 0.73rem;
+        color: var(--muted);
+        margin-left: auto;
+      }
+      .filter-price-badges {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .fpb {
+        border: 1.5px solid var(--border);
+        border-radius: 50px;
+        padding: 0.28rem 0.7rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+        background: #fff;
+      }
+      .fpb:hover,
+      .fpb.active {
+        border-color: var(--saffron);
+        background: var(--saffron);
+        color: #fff;
+      }
+      .star-filter {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        margin-bottom: 0.35rem;
+      }
+      .star-filter input {
+        accent-color: var(--saffron);
+      }
+      .btn-clear-filters {
+        width: 100%;
+        border: 1.5px solid var(--border);
+        background: transparent;
+        border-radius: 50px;
+        padding: 0.5rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .btn-clear-filters:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+
+      /* SORT BAR */
+      .sort-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .sort-tabs {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .sort-tab {
+        border: 1.5px solid var(--border);
+        background: #fff;
+        border-radius: 50px;
+        padding: 0.3rem 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .sort-tab:hover,
+      .sort-tab.active {
+        border-color: var(--saffron);
+        background: var(--saffron);
+        color: #fff;
+      }
+      .results-count {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      /* COURSE CARDS */
+      .course-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: 0.25s;
+        height: 100%;
+        cursor: pointer;
+      }
+      .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        border-color: transparent;
+      }
+      .course-card-thumb {
+        width: 100%;
+        aspect-ratio: 16/9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+      }
+      .course-card-body {
+        padding: 1rem 1.1rem 1.2rem;
+      }
+      .course-category {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 0.3rem;
+      }
+      .course-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.92rem;
+        line-height: 1.35;
+        margin-bottom: 0.4rem;
+      }
+      .course-instructor {
+        font-size: 0.77rem;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+      }
+      .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        margin-bottom: 0.6rem;
+      }
+      .stars {
+        color: #f59e0b;
+        font-weight: 700;
+      }
+      .rating-count {
+        color: var(--muted);
+      }
+      .course-meta-row {
+        display: flex;
+        gap: 0.75rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 0.7rem;
+      }
+      .course-price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .price-now {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: var(--saffron);
+      }
+      .price-was {
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 0.3rem;
+      }
+      .btn-buy {
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.38rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        transition: 0.15s;
+      }
+      .btn-buy:hover {
+        background: var(--saffron-dark);
+      }
+      .badge-new {
+        background: var(--saffron-light);
+        color: var(--saffron);
+        font-size: 0.67rem;
+        font-weight: 700;
+        border-radius: 4px;
+        padding: 0.14rem 0.42rem;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+      }
+      .badge-hot {
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 0.67rem;
+        font-weight: 700;
+        border-radius: 4px;
+        padding: 0.14rem 0.42rem;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+      }
+      .badge-bs {
+        background: var(--teal-light, #f0fdfa);
+        color: var(--teal);
+        font-size: 0.67rem;
+        font-weight: 700;
+        border-radius: 4px;
+        padding: 0.14rem 0.42rem;
+        text-transform: uppercase;
+      }
+
+      /* PAGINATION */
+      .pagination-ml {
+        display: flex;
+        gap: 0.4rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+      .page-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        transition: 0.15s;
+      }
+      .page-btn:hover,
+      .page-btn.active {
+        border-color: var(--saffron);
+        background: var(--saffron);
+        color: #fff;
+      }
+      .page-btn.disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+
+      /* CATEGORY PILLS */
+      .cat-pills {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.3rem;
+        scroll-behavior: smooth;
+      }
+      .cat-pills::-webkit-scrollbar {
+        height: 3px;
+      }
+      .cat-pills::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 50px;
+      }
+      .cat-pill {
+        border: 1.5px solid var(--border);
+        border-radius: 50px;
+        padding: 0.35rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: 0.15s;
+        background: #fff;
+      }
+      .cat-pill:hover,
+      .cat-pill.active {
+        border-color: var(--saffron);
+        background: var(--saffron);
+        color: #fff;
+      }
+
+      @media (max-width: 991px) {
+        .filter-sidebar {
+          position: static;
+          margin-bottom: 1.5rem;
+        }
+        .search-sticky {
+          top: 55px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="ml-nav navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Micro<span>Learn</span></a>
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMain"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav mx-auto gap-1">
+            <li class="nav-item">
+              <a
+                class="nav-link fw-bold"
+                style="color: var(--saffron)"
+                href="marketplace.html"
+                >Marketplace</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="instructor_dashboard.html">Teach</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="student_dashboard.html">My Learning</a>
+            </li>
+          </ul>
+          <div class="d-flex gap-2 mt-2 mt-lg-0">
+            <a
+              href="student_dashboard.html"
+              class="btn"
+              style="
+                border: 1.5px solid var(--ink);
+                border-radius: 50px;
+                padding: 0.32rem 1rem;
+                font-size: 0.86rem;
+                font-weight: 600;
+              "
+              >Dashboard</a
+            >
+            <a href="#" class="btn btn-nav-signup">Sign up</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="marketplace-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <h1>Explore All Courses</h1>
+            <p>1,200+ micro-courses. Every skill you need. Starting at ₹5.</p>
+          </div>
+          <div class="col-md-5 mt-3 mt-md-0">
+            <div style="display: flex; gap: 1.5rem; justify-content: md-end">
+              <div style="text-align: center">
+                <div
+                  style="
+                    font-family: &quot;Syne&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 1.5rem;
+                    color: #fff;
+                  "
+                >
+                  1,200+
+                </div>
+                <div
+                  style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.45)"
+                >
+                  Courses
+                </div>
+              </div>
+              <div style="text-align: center">
+                <div
+                  style="
+                    font-family: &quot;Syne&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 1.5rem;
+                    color: #fff;
+                  "
+                >
+                  350+
+                </div>
+                <div
+                  style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.45)"
+                >
+                  Instructors
+                </div>
+              </div>
+              <div style="text-align: center">
+                <div
+                  style="
+                    font-family: &quot;Syne&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 1.5rem;
+                    color: #fff;
+                  "
+                >
+                  42K+
+                </div>
+                <div
+                  style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.45)"
+                >
+                  Students
+                </div>
+              </div>
+              <div style="text-align: center">
+                <div
+                  style="
+                    font-family: &quot;Syne&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 1.5rem;
+                    color: var(--saffron);
+                  "
+                >
+                  ₹5
+                </div>
+                <div
+                  style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.45)"
+                >
+                  Min Price
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-sticky">
+      <div class="container">
+        <div class="row align-items-center g-2">
+          <div class="col-md-7">
+            <div class="search-input-group">
+              <i class="bi bi-search text-muted"></i>
+              <input
+                type="text"
+                placeholder="Search courses, skills, topics..."
+              />
+              <button class="btn-srch">Search</button>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="cat-pills">
+              <span class="cat-pill active">All</span>
+              <span class="cat-pill">💻 Tech</span>
+              <span class="cat-pill">💼 Business</span>
+              <span class="cat-pill">🎨 Design</span>
+              <span class="cat-pill">📢 Marketing</span>
+              <span class="cat-pill">💰 Finance</span>
+              <span class="cat-pill">🗣️ Language</span>
+              <span class="cat-pill">📸 Creative</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="marketplace-body">
+      <div class="container">
+        <div class="row g-4">
+          <!-- FILTER SIDEBAR -->
+          <div class="col-lg-3">
+            <div class="filter-sidebar">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <div class="filter-title">Filters</div>
+                <button
+                  class="btn-clear-filters"
+                  style="
+                    width: auto;
+                    padding: 0.25rem 0.8rem;
+                    font-size: 0.75rem;
+                  "
+                >
+                  Clear all
+                </button>
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-section-label">Price Range</div>
+                <div class="filter-price-badges">
+                  <span class="fpb active">₹5</span>
+                  <span class="fpb active">₹6</span>
+                  <span class="fpb active">₹7</span>
+                  <span class="fpb active">₹8</span>
+                  <span class="fpb active">₹9</span>
+                  <span class="fpb active">₹10</span>
+                </div>
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-section-label">Category</div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c1" checked /><label for="c1"
+                    >Technology</label
+                  ><span class="count">312</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c2" checked /><label for="c2"
+                    >Business</label
+                  ><span class="count">198</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c3" /><label for="c3">Design</label
+                  ><span class="count">145</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c4" /><label for="c4"
+                    >Marketing</label
+                  ><span class="count">167</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c5" /><label for="c5"
+                    >Finance</label
+                  ><span class="count">89</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c6" /><label for="c6"
+                    >Language</label
+                  ><span class="count">76</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="c7" /><label for="c7"
+                    >Creative</label
+                  ><span class="count">93</span>
+                </div>
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-section-label">Rating</div>
+                <div class="star-filter">
+                  <input type="checkbox" id="r5" checked /><label
+                    for="r5"
+                    style="color: #f59e0b; font-weight: 600"
+                    >★★★★★ 4.5+</label
+                  >
+                </div>
+                <div class="star-filter">
+                  <input type="checkbox" id="r4" /><label
+                    for="r4"
+                    style="color: #f59e0b; font-weight: 600"
+                    >★★★★☆ 4.0+</label
+                  >
+                </div>
+                <div class="star-filter">
+                  <input type="checkbox" id="r3" /><label
+                    for="r3"
+                    style="color: #f59e0b; font-weight: 600"
+                    >★★★☆☆ 3.0+</label
+                  >
+                </div>
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-section-label">Difficulty</div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="d1" checked /><label for="d1"
+                    >Beginner</label
+                  ><span class="count">520</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="d2" checked /><label for="d2"
+                    >Intermediate</label
+                  ><span class="count">410</span>
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="d3" /><label for="d3"
+                    >Advanced</label
+                  ><span class="count">270</span>
+                </div>
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-section-label">Duration</div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="t1" checked /><label for="t1"
+                    >Under 1 hour</label
+                  >
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="t2" checked /><label for="t2"
+                    >1–2 hours</label
+                  >
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="t3" /><label for="t3"
+                    >2–4 hours</label
+                  >
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="t4" /><label for="t4"
+                    >4+ hours</label
+                  >
+                </div>
+              </div>
+
+              <div class="filter-section" style="margin-bottom: 0">
+                <div class="filter-section-label">Features</div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="f1" checked /><label for="f1"
+                    >Certificate</label
+                  >
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="f2" /><label for="f2"
+                    >Hindi / Regional</label
+                  >
+                </div>
+                <div class="filter-checkbox">
+                  <input type="checkbox" id="f3" /><label for="f3"
+                    >New (last 30 days)</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COURSE GRID -->
+          <div class="col-lg-9">
+            <div class="sort-bar">
+              <div class="results-count">
+                Showing <strong>48</strong> of <strong>1,200</strong> courses
+              </div>
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span style="font-size: 0.82rem; color: var(--muted)"
+                  >Sort by:</span
+                >
+                <div class="sort-tabs">
+                  <span class="sort-tab active">Popular</span>
+                  <span class="sort-tab">Newest</span>
+                  <span class="sort-tab">Top Rated</span>
+                  <span class="sort-tab">Price: Low</span>
+                </div>
+                <button
+                  class="btn btn-sm d-lg-none"
+                  style="
+                    border: 1.5px solid var(--border);
+                    border-radius: 50px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                  "
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#filterOffcanvas"
+                >
+                  <i class="bi bi-funnel me-1"></i>Filter
+                </button>
+              </div>
+            </div>
+            <div class="row g-3">
+              {% for course in courses %}
+              <div class="col-sm-6 col-xl-4">
+                <div class="course-card">
+                  <div
+                    class="course-card-thumb"
+                    style="
+                      background: linear-gradient(135deg, #fef3c7, #fed7aa);
+                    "
+                  >
+                    📚
+                  </div>
+
+                  <div class="course-card-body">
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="course-category">Course</span>
+                      <span class="badge-new">NEW</span>
+                    </div>
+
+                    <div class="course-title">{{ course.title }}</div>
+
+                    <div class="course-instructor">
+                      <i class="bi bi-person me-1"></i>
+                      {{ course.instructor }}
+                    </div>
+
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        color: #666;
+                        margin-bottom: 12px;
+                      "
+                    >
+                      {{ course.description|truncatechars:80 }}
+                    </div>
+
+                    <div class="course-price-row">
+                      <div>
+                        <span class="price-now"> ₹{{ course.price }} </span>
+                      </div>
+
+                      <button class="btn-buy">Buy Now</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {% empty %}
+
+              <div class="col-12 text-center">
+                <h4>No courses available.</h4>
+              </div>
+
+              {% endfor %}
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination-ml">
+              <div class="page-btn disabled">
+                <i class="bi bi-chevron-left"></i>
+              </div>
+              <div class="page-btn active">1</div>
+              <div class="page-btn">2</div>
+              <div class="page-btn">3</div>
+              <div class="page-btn">4</div>
+              <div class="page-btn">5</div>
+              <div class="page-btn">…</div>
+              <div class="page-btn">25</div>
+              <div class="page-btn"><i class="bi bi-chevron-right"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBILE FILTER OFFCANVAS -->
+    <div class="offcanvas offcanvas-start" id="filterOffcanvas">
+      <div class="offcanvas-header">
+        <h5
+          class="offcanvas-title"
+          style="font-family: &quot;Syne&quot;, sans-serif; font-weight: 800"
+        >
+          Filters
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div
+        class="offcanvas-body"
+        style="font-family: &quot;DM Sans&quot;, sans-serif"
+      >
+        <p style="color: var(--muted); font-size: 0.85rem">
+          Use desktop view for full filter panel. Mobile simplified filters
+          coming soon.
+        </p>
+        <div class="filter-price-badges mb-3">
+          <span class="fpb active">₹5</span><span class="fpb active">₹6</span
+          ><span class="fpb active">₹7</span> <span class="fpb active">₹8</span
+          ><span class="fpb active">₹9</span><span class="fpb active">₹10</span>
+        </div>
+        <button
+          class="btn w-100"
+          style="
+            background: var(--saffron);
+            color: #fff;
+            border-radius: 50px;
+            font-weight: 700;
+          "
+          data-bs-dismiss="offcanvas"
+        >
+          Apply Filters
+        </button>
+      </div>
+    </div>
+
+    <footer
+      style="
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.5);
+        padding: 2rem 0;
+        text-align: center;
+        margin-top: 2rem;
+      "
+    >
+      <div class="container">
+        <div
+          style="
+            font-family: &quot;Syne&quot;, sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 0.4rem;
+          "
+        >
+          Micro<span style="color: var(--saffron)">Learn</span>
+        </div>
+        <p style="font-size: 0.82rem; margin: 0">
+          © 2025 MicroLearn · All prices in INR · UPI accepted
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.querySelectorAll(".sort-tab").forEach((t) =>
+        t.addEventListener("click", () => {
+          document
+            .querySelectorAll(".sort-tab")
+            .forEach((x) => x.classList.remove("active"));
+          t.classList.add("active");
+        }),
+      );
+      document.querySelectorAll(".cat-pill").forEach((p) =>
+        p.addEventListener("click", () => {
+          document
+            .querySelectorAll(".cat-pill")
+            .forEach((x) => x.classList.remove("active"));
+          p.classList.add("active");
+        }),
+      );
+      document
+        .querySelectorAll(".fpb")
+        .forEach((b) =>
+          b.addEventListener("click", () => b.classList.toggle("active")),
+        );
+      document.querySelectorAll(".page-btn:not(.disabled)").forEach((b) =>
+        b.addEventListener("click", () => {
+          document
+            .querySelectorAll(".page-btn")
+            .forEach((x) => x.classList.remove("active"));
+          b.classList.add("active");
+        }),
+      );
+    </script>
+  </body>
+</html>

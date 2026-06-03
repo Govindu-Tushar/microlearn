@@ -1,0 +1,1906 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MicroLearn – Learn Anything for ₹5–₹10</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #faf8f4;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --teal-light: #f0fdfa;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --card-bg: #ffffff;
+        --shadow: 0 2px 16px rgba(13, 13, 13, 0.07);
+        --shadow-lg: 0 8px 40px rgba(13, 13, 13, 0.12);
+        --radius: 14px;
+        --radius-sm: 8px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .display-font {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* ── NAVBAR ── */
+      .ml-nav {
+        background: rgba(250, 248, 244, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 0.75rem 0;
+      }
+      .ml-nav .navbar-brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.45rem;
+        color: var(--ink);
+        letter-spacing: -0.5px;
+      }
+      .ml-nav .navbar-brand span {
+        color: var(--saffron);
+      }
+      .ml-nav .nav-link {
+        color: var(--ink);
+        font-weight: 500;
+        font-size: 0.92rem;
+        padding: 0.4rem 0.85rem !important;
+        border-radius: 6px;
+        transition: 0.15s;
+      }
+      .ml-nav .nav-link:hover {
+        background: var(--saffron-light);
+        color: var(--saffron);
+      }
+      .ml-nav .btn-nav-login {
+        border: 1.5px solid var(--ink);
+        border-radius: 50px;
+        padding: 0.35rem 1.1rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+      .ml-nav .btn-nav-signup {
+        background: var(--saffron);
+        color: #fff;
+        border-radius: 50px;
+        padding: 0.35rem 1.2rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        border: none;
+      }
+      .ml-nav .btn-nav-signup:hover {
+        background: var(--saffron-dark);
+      }
+
+      /* ── HERO ── */
+      .hero {
+        background: var(--ink);
+        color: #fff;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 70% 60% at 75% 50%,
+            #f97316 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 50% 80% at 10% 80%,
+            #0d9488 0%,
+            transparent 55%
+          );
+        opacity: 0.18;
+      }
+      .hero-eyebrow {
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--saffron);
+        margin-bottom: 0.75rem;
+        display: block;
+      }
+      .hero h1 {
+        font-size: clamp(2.4rem, 5.5vw, 4rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+        margin-bottom: 1.25rem;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--saffron);
+      }
+      .hero p.lead {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        max-width: 480px;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+      }
+      .hero-stat strong {
+        display: block;
+        font-family: "Syne", sans-serif;
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #fff;
+      }
+      .hero-stat span {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .hero-visual {
+        position: relative;
+      }
+      .hero-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.4rem;
+        backdrop-filter: blur(10px);
+        margin-bottom: 1rem;
+        transition: 0.3s;
+      }
+      .hero-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .hero-card-title {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.3rem;
+      }
+      .hero-card-meta {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.55);
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+      }
+      .price-badge {
+        background: var(--saffron);
+        color: #fff;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        border-radius: 6px;
+        padding: 0.2rem 0.55rem;
+      }
+      .price-badge-teal {
+        background: var(--teal);
+      }
+      .hero-float-badge {
+        background: #fff;
+        color: var(--ink);
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+      }
+
+      /* ── SEARCH BAR ── */
+      .search-section {
+        padding: 60px 0 0;
+      }
+      .search-bar-wrapper {
+        background: #fff;
+        border-radius: 50px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        padding: 0.35rem 0.35rem 0.35rem 1.4rem;
+        gap: 0.5rem;
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .search-bar-wrapper input {
+        border: none;
+        background: transparent;
+        font-size: 0.95rem;
+        flex: 1;
+        outline: none;
+        font-family: "DM Sans", sans-serif;
+      }
+      .search-bar-wrapper select {
+        border: none;
+        background: transparent;
+        font-size: 0.88rem;
+        color: var(--muted);
+        outline: none;
+        padding: 0 0.5rem;
+        border-left: 1px solid var(--border);
+      }
+      .search-bar-wrapper .btn-search {
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.6rem 1.4rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+      .search-bar-wrapper .btn-search:hover {
+        background: var(--saffron-dark);
+      }
+      .search-tags {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      .search-tag {
+        background: var(--paper);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        font-size: 0.78rem;
+        padding: 0.28rem 0.8rem;
+        color: var(--muted);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .search-tag:hover {
+        background: var(--saffron-light);
+        color: var(--saffron);
+        border-color: var(--saffron);
+      }
+
+      /* ── SECTION HEADERS ── */
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--saffron);
+        margin-bottom: 0.5rem;
+      }
+      .section-title {
+        font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 0;
+      }
+      .section-desc {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+      }
+
+      /* ── COURSE CARDS ── */
+      .course-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: 0.25s;
+        height: 100%;
+      }
+      .course-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: transparent;
+      }
+      .course-card-img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        display: block;
+      }
+      .course-card-img-placeholder {
+        width: 100%;
+        aspect-ratio: 16/9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+      }
+      .course-card-body {
+        padding: 1rem 1.1rem 1.2rem;
+      }
+      .course-card-category {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 0.4rem;
+      }
+      .course-card-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        line-height: 1.35;
+        margin-bottom: 0.5rem;
+      }
+      .course-card-instructor {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-bottom: 0.6rem;
+      }
+      .course-card-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .rating {
+        font-size: 0.78rem;
+        color: #f59e0b;
+        font-weight: 600;
+      }
+      .rating span {
+        color: var(--muted);
+        font-weight: 400;
+      }
+      .price-tag {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--saffron);
+      }
+      .price-original {
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 0.3rem;
+      }
+      .badge-new {
+        background: var(--saffron-light);
+        color: var(--saffron);
+        font-size: 0.68rem;
+        font-weight: 700;
+        border-radius: 4px;
+        padding: 0.15rem 0.45rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .badge-hot {
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 0.68rem;
+        font-weight: 700;
+        border-radius: 4px;
+        padding: 0.15rem 0.45rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      /* ── CATEGORIES ── */
+      .cat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem 1.2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.22s;
+        text-decoration: none;
+        color: var(--ink);
+        display: block;
+      }
+      .cat-card:hover {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+        transform: translateY(-4px);
+      }
+      .cat-icon {
+        font-size: 2rem;
+        margin-bottom: 0.7rem;
+        display: block;
+      }
+      .cat-name {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.92rem;
+        margin-bottom: 0.2rem;
+      }
+      .cat-count {
+        font-size: 0.77rem;
+        color: var(--muted);
+      }
+
+      /* ── TESTIMONIALS ── */
+      .testimonials {
+        background: var(--ink);
+        color: #fff;
+        padding: 80px 0;
+      }
+      .testimonial-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 1.5rem 1.6rem;
+        height: 100%;
+      }
+      .testimonial-stars {
+        color: #f59e0b;
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+      }
+      .testimonial-text {
+        font-size: 0.93rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.7;
+        margin-bottom: 1.2rem;
+        font-style: italic;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      .testimonial-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+      }
+      .testimonial-name {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        color: #fff;
+      }
+      .testimonial-role {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      /* ── PRICING ── */
+      .pricing {
+        padding: 80px 0;
+        background: var(--paper);
+      }
+      .pricing-card {
+        background: var(--card-bg);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        height: 100%;
+        transition: 0.25s;
+        position: relative;
+      }
+      .pricing-card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-4px);
+      }
+      .pricing-card.featured {
+        border-color: var(--saffron);
+        background: var(--saffron);
+        color: #fff;
+      }
+      .pricing-card.featured .pricing-desc,
+      .pricing-card.featured .pricing-feature {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .pricing-badge-top {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+        white-space: nowrap;
+      }
+      .pricing-name {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+      .pricing-price {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 2.2rem;
+        letter-spacing: -1px;
+        margin-bottom: 0.3rem;
+      }
+      .pricing-price small {
+        font-size: 0.85rem;
+        font-weight: 400;
+        opacity: 0.7;
+      }
+      .pricing-desc {
+        font-size: 0.83rem;
+        color: var(--muted);
+        margin-bottom: 1.4rem;
+      }
+      .pricing-feature {
+        font-size: 0.87rem;
+        color: var(--ink);
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+        margin-bottom: 0.55rem;
+      }
+      .pricing-feature i {
+        color: var(--teal);
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+      .pricing-card.featured .pricing-feature i {
+        color: #fff;
+      }
+      .btn-pricing {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 0.7rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+        text-decoration: none;
+        transition: 0.15s;
+      }
+      .btn-pricing-outline {
+        border: 1.5px solid var(--ink);
+        color: var(--ink);
+      }
+      .btn-pricing-outline:hover {
+        background: var(--ink);
+        color: #fff;
+      }
+      .btn-pricing-white {
+        background: #fff;
+        color: var(--saffron);
+      }
+      .btn-pricing-white:hover {
+        background: var(--ink);
+        color: #fff;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 60px 0 30px;
+      }
+      footer .brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: #fff;
+        margin-bottom: 0.75rem;
+      }
+      footer .brand span {
+        color: var(--saffron);
+      }
+      footer p {
+        font-size: 0.85rem;
+        line-height: 1.7;
+        max-width: 280px;
+      }
+      footer h6 {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        color: #fff;
+        font-size: 0.82rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      footer a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        transition: 0.15s;
+      }
+      footer a:hover {
+        color: var(--saffron);
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        font-size: 0.8rem;
+      }
+      .social-links {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1rem;
+      }
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff !important;
+        font-size: 0.9rem;
+        margin: 0;
+        transition: 0.15s;
+      }
+      .social-links a:hover {
+        background: var(--saffron);
+      }
+
+      /* ── UTILS ── */
+      .section-pad {
+        padding: 80px 0;
+      }
+      .btn-primary-ml {
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.7rem 1.8rem;
+        font-weight: 700;
+        font-size: 0.93rem;
+        transition: 0.15s;
+      }
+      .btn-primary-ml:hover {
+        background: var(--saffron-dark);
+        color: #fff;
+      }
+      .btn-outline-ml {
+        border: 1.5px solid var(--ink);
+        color: var(--ink);
+        background: transparent;
+        border-radius: 50px;
+        padding: 0.65rem 1.6rem;
+        font-weight: 600;
+        font-size: 0.93rem;
+        transition: 0.15s;
+      }
+      .btn-outline-ml:hover {
+        background: var(--ink);
+        color: #fff;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease both;
+      }
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+      @media (max-width: 768px) {
+        .hero {
+          padding: 60px 0 50px;
+        }
+        .hero-stats {
+          gap: 1.2rem;
+        }
+        .search-bar-wrapper {
+          flex-direction: column;
+          border-radius: var(--radius);
+          padding: 0.75rem;
+        }
+        .search-bar-wrapper input {
+          width: 100%;
+        }
+        .search-bar-wrapper select {
+          border: none;
+          border-top: 1px solid var(--border);
+          padding-top: 0.5rem;
+          width: 100%;
+        }
+        .search-bar-wrapper .btn-search {
+          width: 100%;
+          text-align: center;
+          border-radius: var(--radius-sm);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="ml-nav navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}"
+          >Micro<span>Learn</span></a
+        >
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMain"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav mx-auto gap-1">
+            <li class="nav-item">
+              <a class="nav-link" href="marketplace.html"
+                ><i class="bi bi-grid me-1"></i>Courses</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#categories"
+                ><i class="bi bi-tag me-1"></i>Categories</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="instructor_dashboard.html"
+                ><i class="bi bi-mortarboard me-1"></i>Teach</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing"
+                ><i class="bi bi-gem me-1"></i>Pricing</a
+              >
+            </li>
+          </ul>
+          <div class="d-flex gap-2 mt-2 mt-lg-0">
+            <a href="student_dashboard.html" class="btn btn-nav-login"
+              >Log in</a
+            >
+            <a href="#" class="btn btn-nav-signup">Sign up free</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6">
+            <span class="hero-eyebrow fade-up">🇮🇳 Made for Bharat</span>
+            <h1 class="fade-up delay-1">
+              Learn Skills That <em>Actually</em> Pay Off
+            </h1>
+            <p class="lead fade-up delay-2">
+              Bite-sized professional courses starting at just
+              <strong style="color: var(--saffron)">₹5</strong>. No
+              subscription. No fluff. Pure knowledge.
+            </p>
+            <div class="d-flex gap-3 flex-wrap fade-up delay-3">
+              <a href="marketplace.html" class="btn btn-primary-ml"
+                >Browse Courses</a
+              >
+              <a
+                href="instructor_dashboard.html"
+                class="btn"
+                style="
+                  color: #fff;
+                  border: 1.5px solid rgba(255, 255, 255, 0.3);
+                  border-radius: 50px;
+                  padding: 0.65rem 1.6rem;
+                  font-weight: 600;
+                  font-size: 0.93rem;
+                "
+                >Become an Instructor</a
+              >
+            </div>
+            <div class="hero-stats fade-up delay-4">
+              <div class="hero-stat">
+                <strong>42K+</strong><span>Students</span>
+              </div>
+              <div class="hero-stat">
+                <strong>1,200+</strong><span>Courses</span>
+              </div>
+              <div class="hero-stat">
+                <strong>₹5</strong><span>Min Price</span>
+              </div>
+              <div class="hero-stat">
+                <strong>4.8★</strong><span>Avg Rating</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 hero-visual">
+            <div class="hero-card fade-up delay-1">
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 10px;
+                    background: rgba(249, 115, 22, 0.25);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.3rem;
+                  "
+                >
+                  🐍
+                </div>
+                <div class="flex-grow-1">
+                  <div class="hero-card-title">
+                    Python for Absolute Beginners
+                  </div>
+                  <div class="hero-card-meta">
+                    <span
+                      ><i class="bi bi-person-fill me-1"></i>Rahul Sharma</span
+                    >
+                    <span><i class="bi bi-clock me-1"></i>2.5 hrs</span>
+                    <span
+                      ><i class="bi bi-star-fill text-warning me-1"></i
+                      >4.9</span
+                    >
+                  </div>
+                </div>
+                <span class="price-badge">₹7</span>
+              </div>
+              <div
+                class="mt-2"
+                style="
+                  background: rgba(255, 255, 255, 0.08);
+                  border-radius: 6px;
+                  height: 5px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    background: var(--saffron);
+                    width: 68%;
+                    height: 100%;
+                    border-radius: 6px;
+                  "
+                ></div>
+              </div>
+              <div
+                style="
+                  font-size: 0.72rem;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-top: 0.3rem;
+                "
+              >
+                68% complete · 2,340 enrolled
+              </div>
+            </div>
+            <div class="hero-card fade-up delay-2">
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 10px;
+                    background: rgba(13, 148, 136, 0.25);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.3rem;
+                  "
+                >
+                  📊
+                </div>
+                <div class="flex-grow-1">
+                  <div class="hero-card-title">
+                    Excel & Data Analysis Crash Course
+                  </div>
+                  <div class="hero-card-meta">
+                    <span
+                      ><i class="bi bi-person-fill me-1"></i>Priya Nair</span
+                    >
+                    <span><i class="bi bi-clock me-1"></i>1.8 hrs</span>
+                    <span
+                      ><i class="bi bi-star-fill text-warning me-1"></i
+                      >4.7</span
+                    >
+                  </div>
+                </div>
+                <span class="price-badge price-badge-teal">₹5</span>
+              </div>
+            </div>
+            <div class="hero-card fade-up delay-3">
+              <div class="d-flex align-items-center gap-3">
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 10px;
+                    background: rgba(147, 51, 234, 0.25);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.3rem;
+                  "
+                >
+                  🎨
+                </div>
+                <div class="flex-grow-1">
+                  <div class="hero-card-title">
+                    Canva Design for Social Media
+                  </div>
+                  <div class="hero-card-meta">
+                    <span
+                      ><i class="bi bi-person-fill me-1"></i>Ananya Singh</span
+                    >
+                    <span><i class="bi bi-clock me-1"></i>1.2 hrs</span>
+                    <span
+                      ><i class="bi bi-star-fill text-warning me-1"></i
+                      >4.8</span
+                    >
+                  </div>
+                </div>
+                <span class="price-badge" style="background: #7c3aed">₹8</span>
+              </div>
+            </div>
+            <div class="hero-float-badge">
+              <i class="bi bi-lightning-charge-fill text-warning"></i> New
+              course every day!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="search-section" id="search">
+      <div class="container">
+        <div class="text-center mb-3">
+          <p class="section-label">Find Your Next Skill</p>
+          <h2 class="section-title">Search 1,200+ Micro-Courses</h2>
+        </div>
+        <div class="search-bar-wrapper">
+          <i class="bi bi-search text-muted"></i>
+          <input
+            type="text"
+            placeholder="e.g. Python, Digital Marketing, Excel..."
+          />
+          <select>
+            <option>All Categories</option>
+            <option>Technology</option>
+            <option>Business</option>
+            <option>Design</option>
+            <option>Marketing</option>
+            <option>Finance</option>
+          </select>
+          <button class="btn-search">Search</button>
+        </div>
+        <div class="search-tags mt-2">
+          <span class="search-tag">🐍 Python</span>
+          <span class="search-tag">📊 Excel</span>
+          <span class="search-tag">📱 Digital Marketing</span>
+          <span class="search-tag">🎨 Canva</span>
+          <span class="search-tag">💰 Finance</span>
+          <span class="search-tag">🌐 Web Dev</span>
+          <span class="search-tag">📸 Photography</span>
+          <span class="search-tag">🗣️ English</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED COURSES -->
+    <section class="section-pad" id="featured">
+      <div class="container">
+        <div
+          class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3"
+        >
+          <div>
+            <p class="section-label mb-1">Hot Right Now</p>
+            <h2 class="section-title">Featured Courses</h2>
+            <p class="section-desc">
+              Curated picks loved by thousands of learners
+            </p>
+          </div>
+          <a href="marketplace.html" class="btn btn-outline-ml"
+            >View All <i class="bi bi-arrow-right ms-1"></i
+          ></a>
+        </div>
+        <div class="row g-3">
+          <!-- Card 1 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #fef3c7, #fed7aa)"
+              >
+                🐍
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Technology</span>
+                  <span class="badge-hot">HOT</span>
+                </div>
+                <div class="course-card-title">Python Basics in 2 Hours</div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Rahul Sharma
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★★ <span>(2.3k)</span></div>
+                  <div>
+                    <span class="price-tag">₹7</span
+                    ><span class="price-original">₹499</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #d1fae5, #a7f3d0)"
+              >
+                📊
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Business</span>
+                  <span class="badge-new">NEW</span>
+                </div>
+                <div class="course-card-title">
+                  Excel for Office Professionals
+                </div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Priya Nair
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★★ <span>(1.8k)</span></div>
+                  <div>
+                    <span class="price-tag">₹5</span
+                    ><span class="price-original">₹399</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #ede9fe, #ddd6fe)"
+              >
+                🎨
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Design</span>
+                  <span class="badge-hot">HOT</span>
+                </div>
+                <div class="course-card-title">
+                  Canva Masterclass for Creators
+                </div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Ananya Singh
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★☆ <span>(987)</span></div>
+                  <div>
+                    <span class="price-tag">₹8</span
+                    ><span class="price-original">₹599</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #fce7f3, #fbcfe8)"
+              >
+                📱
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Marketing</span>
+                  <span class="badge-new">NEW</span>
+                </div>
+                <div class="course-card-title">Instagram Growth Hacks 2025</div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Arjun Patel
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★★ <span>(3.1k)</span></div>
+                  <div>
+                    <span class="price-tag">₹10</span
+                    ><span class="price-original">₹799</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 5 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #e0f2fe, #bae6fd)"
+              >
+                💰
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Finance</span>
+                </div>
+                <div class="course-card-title">
+                  Stock Market Basics for Beginners
+                </div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Vikram Mehta
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★★ <span>(4.2k)</span></div>
+                  <div>
+                    <span class="price-tag">₹9</span
+                    ><span class="price-original">₹699</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 6 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #f0fdf4, #dcfce7)"
+              >
+                🌐
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Technology</span>
+                  <span class="badge-new">NEW</span>
+                </div>
+                <div class="course-card-title">HTML & CSS in 90 Minutes</div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Sneha Kulkarni
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★☆ <span>(756)</span></div>
+                  <div>
+                    <span class="price-tag">₹6</span
+                    ><span class="price-original">₹449</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 7 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #fef9c3, #fef08a)"
+              >
+                🗣️
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Language</span>
+                  <span class="badge-hot">HOT</span>
+                </div>
+                <div class="course-card-title">
+                  Spoken English for Career Growth
+                </div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Meera Iyer
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★★ <span>(5.6k)</span></div>
+                  <div>
+                    <span class="price-tag">₹10</span
+                    ><span class="price-original">₹899</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 8 -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="course-card">
+              <div
+                class="course-card-img-placeholder"
+                style="background: linear-gradient(135deg, #fdf4ff, #fae8ff)"
+              >
+                📸
+              </div>
+              <div class="course-card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1"
+                >
+                  <span class="course-card-category">Creative</span>
+                </div>
+                <div class="course-card-title">
+                  Mobile Photography Essentials
+                </div>
+                <div class="course-card-instructor">
+                  <i class="bi bi-person me-1"></i>Rohan Bose
+                </div>
+                <div class="course-card-meta">
+                  <div class="rating">★★★★☆ <span>(1.1k)</span></div>
+                  <div>
+                    <span class="price-tag">₹7</span
+                    ><span class="price-original">₹549</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section-pad" id="categories" style="background: #f3f0ea">
+      <div class="container">
+        <div class="text-center mb-4">
+          <p class="section-label">Explore</p>
+          <h2 class="section-title">Browse by Category</h2>
+          <p class="section-desc">Find exactly what you want to learn</p>
+        </div>
+        <div class="row g-3">
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">💻</span>
+              <div class="cat-name">Technology</div>
+              <div class="cat-count">312 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">💼</span>
+              <div class="cat-name">Business</div>
+              <div class="cat-count">198 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🎨</span>
+              <div class="cat-name">Design</div>
+              <div class="cat-count">145 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">📢</span>
+              <div class="cat-name">Marketing</div>
+              <div class="cat-count">167 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">💰</span>
+              <div class="cat-name">Finance</div>
+              <div class="cat-count">89 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🗣️</span>
+              <div class="cat-name">Language</div>
+              <div class="cat-count">76 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">📸</span>
+              <div class="cat-name">Creative</div>
+              <div class="cat-count">93 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🏥</span>
+              <div class="cat-name">Health</div>
+              <div class="cat-count">54 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🍳</span>
+              <div class="cat-name">Cooking</div>
+              <div class="cat-count">41 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🎵</span>
+              <div class="cat-name">Music</div>
+              <div class="cat-count">38 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">🧘</span>
+              <div class="cat-name">Wellness</div>
+              <div class="cat-count">29 courses</div>
+            </a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <a href="marketplace.html" class="cat-card">
+              <span class="cat-icon">➕</span>
+              <div class="cat-name">More</div>
+              <div class="cat-count">60+ courses</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section-pad">
+      <div class="container">
+        <div class="text-center mb-5">
+          <p class="section-label">Simple &amp; Fast</p>
+          <h2 class="section-title">How MicroLearn Works</h2>
+        </div>
+        <div class="row g-4 text-center">
+          <div class="col-md-3">
+            <div
+              style="
+                width: 56px;
+                height: 56px;
+                background: var(--saffron-light);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1rem;
+              "
+            >
+              🔍
+            </div>
+            <h5
+              style="
+                font-family: &quot;Syne&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+              "
+            >
+              Search & Discover
+            </h5>
+            <p style="font-size: 0.85rem; color: var(--muted)">
+              Browse 1,200+ micro-courses across 20+ categories.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <div
+              style="
+                width: 56px;
+                height: 56px;
+                background: #f0fdfa;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1rem;
+              "
+            >
+              💳
+            </div>
+            <h5
+              style="
+                font-family: &quot;Syne&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+              "
+            >
+              Pay Just ₹5–₹10
+            </h5>
+            <p style="font-size: 0.85rem; color: var(--muted)">
+              One-time payment. Lifetime access. No hidden fees.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <div
+              style="
+                width: 56px;
+                height: 56px;
+                background: #fdf4ff;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1rem;
+              "
+            >
+              ▶️
+            </div>
+            <h5
+              style="
+                font-family: &quot;Syne&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+              "
+            >
+              Learn Anywhere
+            </h5>
+            <p style="font-size: 0.85rem; color: var(--muted)">
+              Watch on phone, tablet or laptop. At your own pace.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <div
+              style="
+                width: 56px;
+                height: 56px;
+                background: #fef9c3;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1rem;
+              "
+            >
+              🏆
+            </div>
+            <h5
+              style="
+                font-family: &quot;Syne&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+              "
+            >
+              Get Certified
+            </h5>
+            <p style="font-size: 0.85rem; color: var(--muted)">
+              Earn a shareable certificate upon course completion.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+      <div class="container">
+        <div class="text-center mb-5">
+          <p class="section-label" style="color: var(--saffron)">
+            Real Stories
+          </p>
+          <h2 class="section-title" style="color: #fff">
+            Students Love MicroLearn
+          </h2>
+          <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.95rem">
+            Changing lives, one ₹5 at a time
+          </p>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "I learned Python in a weekend and got a freelance project worth
+                ₹15,000! Best ₹7 I ever spent."
+              </p>
+              <div class="testimonial-author">
+                <div
+                  class="testimonial-avatar"
+                  style="
+                    background: linear-gradient(135deg, #f97316, #ef4444);
+                    color: #fff;
+                  "
+                >
+                  RS
+                </div>
+                <div>
+                  <div class="testimonial-name">Ravi Shankar</div>
+                  <div class="testimonial-role">
+                    Freelance Developer, Hyderabad
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "As a homemaker, I couldn't afford expensive courses. MicroLearn
+                gave me Canva skills and I now run a design business!"
+              </p>
+              <div class="testimonial-author">
+                <div
+                  class="testimonial-avatar"
+                  style="
+                    background: linear-gradient(135deg, #7c3aed, #ec4899);
+                    color: #fff;
+                  "
+                >
+                  PD
+                </div>
+                <div>
+                  <div class="testimonial-name">Pooja Desai</div>
+                  <div class="testimonial-role">Freelance Designer, Pune</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "Stock market course for ₹9! I now manage my own SIP and saved
+                ₹50k in the first year through smart investing."
+              </p>
+              <div class="testimonial-author">
+                <div
+                  class="testimonial-avatar"
+                  style="
+                    background: linear-gradient(135deg, #0d9488, #3b82f6);
+                    color: #fff;
+                  "
+                >
+                  AK
+                </div>
+                <div>
+                  <div class="testimonial-name">Amit Kumar</div>
+                  <div class="testimonial-role">Bank Employee, Mumbai</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <div class="text-center mb-5">
+          <p class="section-label">Fair &amp; Transparent</p>
+          <h2 class="section-title">Simple Pricing</h2>
+          <p class="section-desc">
+            No subscriptions. No surprises. Just learning.
+          </p>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-md-4">
+            <div class="pricing-card">
+              <div class="pricing-name">Single Course</div>
+              <div class="pricing-price">₹5–₹10 <small>/ course</small></div>
+              <p class="pricing-desc">
+                Pay per course. Keep forever. Perfect for trying out.
+              </p>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Lifetime access to
+                purchased course
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> HD video lessons
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Completion certificate
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Mobile & desktop access
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-x-circle" style="color: var(--muted)"></i> No
+                bundle discount
+              </div>
+              <a href="marketplace.html" class="btn-pricing btn-pricing-outline"
+                >Browse Courses</a
+              >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="pricing-card featured">
+              <div class="pricing-badge-top">Most Popular</div>
+              <div class="pricing-name" style="color: #fff">Wallet Bundle</div>
+              <div class="pricing-price" style="color: #fff">
+                ₹50 <small>bundle</small>
+              </div>
+              <p class="pricing-desc">
+                Add ₹50 to wallet and get ₹10 bonus credit. Access 6–10 courses!
+              </p>
+              <div class="pricing-feature" style="color: #fff">
+                <i class="bi bi-check-circle-fill"></i> ₹60 total wallet value
+              </div>
+              <div class="pricing-feature" style="color: #fff">
+                <i class="bi bi-check-circle-fill"></i> Access 6–10+ courses
+              </div>
+              <div class="pricing-feature" style="color: #fff">
+                <i class="bi bi-check-circle-fill"></i> All single course
+                benefits
+              </div>
+              <div class="pricing-feature" style="color: #fff">
+                <i class="bi bi-check-circle-fill"></i> Priority support
+              </div>
+              <div class="pricing-feature" style="color: #fff">
+                <i class="bi bi-check-circle-fill"></i> Never expires
+              </div>
+              <a
+                href="student_dashboard.html"
+                class="btn-pricing btn-pricing-white"
+                >Get Bundle Deal</a
+              >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="pricing-card">
+              <div class="pricing-name">Instructor Plan</div>
+              <div class="pricing-price">Free <small>to start</small></div>
+              <p class="pricing-desc">
+                Upload your knowledge and earn. Zero upfront cost.
+              </p>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Upload unlimited courses
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> 70% revenue share
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Real-time analytics
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Instant UPI payouts
+              </div>
+              <div class="pricing-feature">
+                <i class="bi bi-check-circle-fill"></i> Course management tools
+              </div>
+              <a
+                href="instructor_dashboard.html"
+                class="btn-pricing btn-pricing-outline"
+                >Start Teaching</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Trust badges -->
+        <div class="d-flex justify-content-center gap-4 flex-wrap mt-5">
+          <div
+            style="
+              font-size: 0.83rem;
+              color: var(--muted);
+              display: flex;
+              align-items: center;
+              gap: 0.4rem;
+            "
+          >
+            <i class="bi bi-shield-check text-success"></i> UPI / Cards / Wallet
+          </div>
+          <div
+            style="
+              font-size: 0.83rem;
+              color: var(--muted);
+              display: flex;
+              align-items: center;
+              gap: 0.4rem;
+            "
+          >
+            <i class="bi bi-arrow-counterclockwise text-primary"></i> 7-day
+            money back
+          </div>
+          <div
+            style="
+              font-size: 0.83rem;
+              color: var(--muted);
+              display: flex;
+              align-items: center;
+              gap: 0.4rem;
+            "
+          >
+            <i class="bi bi-lock-fill text-warning"></i> 100% Secure payments
+          </div>
+          <div
+            style="
+              font-size: 0.83rem;
+              color: var(--muted);
+              display: flex;
+              align-items: center;
+              gap: 0.4rem;
+            "
+          >
+            <i class="bi bi-phone text-info"></i> Works on any device
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section style="background: var(--saffron); padding: 60px 0">
+      <div class="container text-center">
+        <h2
+          style="
+            font-family: &quot;Syne&quot;, sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            color: #fff;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.75rem;
+          "
+        >
+          Start Learning Today for Just ₹5
+        </h2>
+        <p
+          style="
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            margin-bottom: 1.8rem;
+          "
+        >
+          Join 42,000+ students who are already upskilling on MicroLearn
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a
+            href="marketplace.html"
+            class="btn"
+            style="
+              background: #fff;
+              color: var(--saffron);
+              border-radius: 50px;
+              padding: 0.75rem 2rem;
+              font-weight: 700;
+              font-size: 0.95rem;
+            "
+            >Browse Courses</a
+          >
+          <a
+            href="instructor_dashboard.html"
+            class="btn"
+            style="
+              background: transparent;
+              color: #fff;
+              border: 2px solid rgba(255, 255, 255, 0.6);
+              border-radius: 50px;
+              padding: 0.75rem 2rem;
+              font-weight: 600;
+              font-size: 0.95rem;
+            "
+            >Become Instructor</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="brand">Micro<span>Learn</span></div>
+            <p>
+              Affordable micro-learning for every Indian. Skills start at ₹5.
+              Learn anywhere, anytime.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="bi bi-twitter-x"></i></a>
+              <a href="#"><i class="bi bi-instagram"></i></a>
+              <a href="#"><i class="bi bi-youtube"></i></a>
+              <a href="#"><i class="bi bi-linkedin"></i></a>
+              <a href="#"><i class="bi bi-telegram"></i></a>
+            </div>
+          </div>
+          <div class="col-6 col-md-2 offset-lg-1">
+            <h6>Learn</h6>
+            <a href="marketplace.html">All Courses</a>
+            <a href="#">Technology</a>
+            <a href="#">Business</a>
+            <a href="#">Design</a>
+            <a href="#">Finance</a>
+          </div>
+          <div class="col-6 col-md-2">
+            <h6>Teach</h6>
+            <a href="instructor_dashboard.html">Become Instructor</a>
+            <a href="#">Upload Course</a>
+            <a href="#">Earnings</a>
+            <a href="#">Guidelines</a>
+          </div>
+          <div class="col-6 col-md-2">
+            <h6>Company</h6>
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Press</a>
+          </div>
+          <div class="col-6 col-md-2">
+            <h6>Support</h6>
+            <a href="#">Help Center</a>
+            <a href="#">Refund Policy</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+        <div
+          class="footer-bottom d-flex justify-content-between flex-wrap gap-2"
+        >
+          <span>© 2025 MicroLearn. Built with ❤️ in India.</span>
+          <span>All prices in INR · GST included · UPI accepted</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

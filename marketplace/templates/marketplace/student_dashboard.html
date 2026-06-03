@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard – MicroLearn</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #f7f5f1;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --teal-light: #f0fdfa;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --card-bg: #ffffff;
+        --sidebar-w: 250px;
+        --radius: 14px;
+        --shadow: 0 2px 16px rgba(13, 13, 13, 0.07);
+        --shadow-lg: 0 8px 40px rgba(13, 13, 13, 0.12);
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        margin: 0;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        background: var(--ink);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        transition: 0.3s;
+      }
+      .sidebar-brand {
+        padding: 1.4rem 1.5rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .sidebar-brand a {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: #fff;
+        text-decoration: none;
+      }
+      .sidebar-brand a span {
+        color: var(--saffron);
+      }
+      .sidebar-nav {
+        padding: 1rem 0.75rem;
+        flex: 1;
+      }
+      .nav-section-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.3);
+        padding: 0.5rem 0.75rem;
+        margin-top: 0.5rem;
+      }
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.62rem 0.85rem;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: 0.15s;
+        margin-bottom: 0.15rem;
+      }
+      .sidebar-link i {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+      }
+      .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+      }
+      .sidebar-link.active {
+        background: var(--saffron);
+        color: #fff;
+      }
+      .sidebar-user {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .sidebar-user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--saffron), #ef4444);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .user-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #fff;
+      }
+      .user-email {
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* MAIN */
+      .main-content {
+        margin-left: var(--sidebar-w);
+        min-height: 100vh;
+      }
+      .top-bar {
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 1.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .top-bar-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+      }
+      .page-body {
+        padding: 2rem 1.75rem;
+      }
+
+      /* STAT CARDS */
+      .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .stat-value {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.6rem;
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+      }
+      .stat-change {
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .stat-change.up {
+        color: #16a34a;
+      }
+      .stat-change.down {
+        color: #dc2626;
+      }
+
+      /* WALLET */
+      .wallet-card {
+        background: linear-gradient(135deg, var(--ink) 0%, #1c1c2e 100%);
+        border-radius: var(--radius);
+        padding: 1.75rem;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .wallet-card::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 160px;
+        height: 160px;
+        background: var(--saffron);
+        border-radius: 50%;
+        opacity: 0.12;
+      }
+      .wallet-balance {
+        font-family: "Syne", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+      }
+      .wallet-label {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.25rem;
+      }
+      .wallet-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.2rem;
+        flex-wrap: wrap;
+      }
+      .wallet-btn {
+        padding: 0.5rem 1.1rem;
+        border-radius: 50px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: 0.15s;
+      }
+      .wallet-btn-primary {
+        background: var(--saffron);
+        color: #fff;
+      }
+      .wallet-btn-primary:hover {
+        background: var(--saffron-dark);
+      }
+      .wallet-btn-outline {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+      }
+      .wallet-transaction {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+      }
+      .wallet-transaction:last-child {
+        border: none;
+      }
+      .txn-credit {
+        color: #16a34a;
+        font-weight: 600;
+      }
+      .txn-debit {
+        color: #dc2626;
+        font-weight: 600;
+      }
+
+      /* PROGRESS CARDS */
+      .course-progress-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: 0.2s;
+      }
+      .course-progress-card:hover {
+        box-shadow: var(--shadow);
+      }
+      .course-emoji {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+      }
+      .course-progress-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+      }
+      .course-progress-instructor {
+        font-size: 0.76rem;
+        color: var(--muted);
+      }
+      .progress-bar-ml {
+        background: #e5e7eb;
+        border-radius: 50px;
+        height: 6px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        border-radius: 50px;
+        transition: 0.3s;
+      }
+      .progress-pct {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--saffron);
+        margin-left: 0.5rem;
+      }
+      .continue-btn {
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .continue-btn:hover {
+        background: var(--saffron-dark);
+      }
+
+      /* CERTIFICATES */
+      .cert-card {
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        border: 1.5px solid #fcd34d;
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        text-align: center;
+        height: 100%;
+      }
+      .cert-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .cert-name {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+      }
+      .cert-date {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+      .cert-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: 0.75rem;
+        background: var(--ink);
+        color: #fff;
+        border-radius: 50px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.76rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.15s;
+      }
+      .cert-download:hover {
+        background: var(--saffron);
+        color: #fff;
+      }
+
+      /* SECTION CARD */
+      .section-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .section-card-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      @media (max-width: 991px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .sidebar.show {
+          transform: translateX(0);
+        }
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html">Micro<span>Learn</span></a>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a class="sidebar-link active" href="{% url 'student_dashboard' %}"
+          ><i class="bi bi-speedometer2"></i> Dashboard</a
+        >
+        <a class="sidebar-link" href="marketplace.html"
+          ><i class="bi bi-grid"></i> Browse Courses</a
+        >
+        <a class="sidebar-link" href="#my-courses"
+          ><i class="bi bi-play-circle"></i> My Courses</a
+        >
+        <div class="nav-section-label">Account</div>
+        <a class="sidebar-link" href="#wallet"
+          ><i class="bi bi-wallet2"></i> Wallet</a
+        >
+        <a class="sidebar-link" href="#certificates"
+          ><i class="bi bi-award"></i> Certificates</a
+        >
+        <a class="sidebar-link" href="#"
+          ><i class="bi bi-bell"></i> Notifications
+          <span class="badge bg-danger ms-auto" style="font-size: 0.65rem"
+            >3</span
+          ></a
+        >
+        <a class="sidebar-link" href="#"><i class="bi bi-gear"></i> Settings</a>
+        <div class="nav-section-label">Help</div>
+        <a class="sidebar-link" href="#"
+          ><i class="bi bi-question-circle"></i> Support</a
+        >
+        <a class="sidebar-link" href="index.html"
+          ><i class="bi bi-box-arrow-left"></i> Logout</a
+        >
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-info">
+          <div class="user-avatar">RK</div>
+          <div>
+            <div class="user-name">Ravi Kumar</div>
+            <div class="user-email">ravi@example.com</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="d-flex align-items-center gap-3">
+          <button
+            class="btn btn-sm d-lg-none border-0 p-0 me-2"
+            onclick="
+              document.getElementById('sidebar').classList.toggle('show')
+            "
+          >
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <div class="top-bar-title">Student Dashboard</div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <a
+            href="marketplace.html"
+            class="btn btn-sm"
+            style="
+              background: var(--saffron);
+              color: #fff;
+              border-radius: 50px;
+              font-size: 0.82rem;
+              font-weight: 600;
+              padding: 0.35rem 1rem;
+            "
+            >+ Buy Courses</a
+          >
+          <div class="user-avatar" style="cursor: pointer">RK</div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <!-- GREETING -->
+        <div class="mb-4">
+          <h1
+            style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.2rem"
+          >
+            Good morning, Ravi! 👋
+          </h1>
+          <p style="color: var(--muted); font-size: 0.9rem">
+            You have 3 courses in progress. Keep going!
+          </p>
+        </div>
+
+        <!-- STATS ROW -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--saffron-light)">
+                📚
+              </div>
+              <div>
+                <div class="stat-value">7</div>
+                <div class="stat-label">Courses Purchased</div>
+                <div class="stat-change up">
+                  <i class="bi bi-arrow-up"></i> 2 this month
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: var(--teal-light)">
+                ✅
+              </div>
+              <div>
+                <div class="stat-value">4</div>
+                <div class="stat-label">Completed</div>
+                <div class="stat-change up">
+                  <i class="bi bi-arrow-up"></i> 57% completion
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #fef9c3">🏆</div>
+              <div>
+                <div class="stat-value">4</div>
+                <div class="stat-label">Certificates</div>
+                <div class="stat-change up">
+                  <i class="bi bi-arrow-up"></i> 1 new
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: #fdf4ff">⏱️</div>
+              <div>
+                <div class="stat-value">14h</div>
+                <div class="stat-label">Learning Time</div>
+                <div class="stat-change up">
+                  <i class="bi bi-arrow-up"></i> 3h this week
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- LEFT COLUMN -->
+          <div class="col-lg-8">
+            <!-- IN-PROGRESS COURSES -->
+            <div class="section-card" id="my-courses">
+              <div class="section-card-title">
+                <i class="bi bi-play-circle-fill text-warning"></i> Continue
+                Learning
+              </div>
+              <div class="d-flex flex-column gap-2">
+                <div class="course-progress-card">
+                  <div
+                    class="course-emoji"
+                    style="
+                      background: linear-gradient(135deg, #fef3c7, #fed7aa);
+                    "
+                  >
+                    🐍
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="course-progress-title">
+                      Python Basics in 2 Hours
+                    </div>
+                    <div class="course-progress-instructor">
+                      Rahul Sharma · 2.5 hrs total
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="progress-bar-ml flex-grow-1">
+                        <div
+                          class="progress-bar-fill"
+                          style="width: 68%; background: var(--saffron)"
+                        ></div>
+                      </div>
+                      <span class="progress-pct">68%</span>
+                    </div>
+                  </div>
+                  <button class="continue-btn">Continue</button>
+                </div>
+                <div class="course-progress-card">
+                  <div
+                    class="course-emoji"
+                    style="
+                      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+                    "
+                  >
+                    📊
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="course-progress-title">
+                      Excel for Office Professionals
+                    </div>
+                    <div class="course-progress-instructor">
+                      Priya Nair · 1.8 hrs total
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="progress-bar-ml flex-grow-1">
+                        <div
+                          class="progress-bar-fill"
+                          style="width: 30%; background: var(--teal)"
+                        ></div>
+                      </div>
+                      <span class="progress-pct" style="color: var(--teal)"
+                        >30%</span
+                      >
+                    </div>
+                  </div>
+                  <button class="continue-btn" style="background: var(--teal)">
+                    Continue
+                  </button>
+                </div>
+                <div class="course-progress-card">
+                  <div
+                    class="course-emoji"
+                    style="
+                      background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+                    "
+                  >
+                    📱
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="course-progress-title">
+                      Instagram Growth Hacks 2025
+                    </div>
+                    <div class="course-progress-instructor">
+                      Arjun Patel · 1.5 hrs total
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="progress-bar-ml flex-grow-1">
+                        <div
+                          class="progress-bar-fill"
+                          style="width: 15%; background: #a855f7"
+                        ></div>
+                      </div>
+                      <span class="progress-pct" style="color: #a855f7"
+                        >15%</span
+                      >
+                    </div>
+                  </div>
+                  <button class="continue-btn" style="background: #a855f7">
+                    Continue
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALL PURCHASED COURSES -->
+            <div class="section-card">
+              <div class="section-card-title">
+                <i class="bi bi-collection-play-fill text-primary"></i> All
+                Purchased Courses
+              </div>
+              <div class="row g-2">
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: var(--paper);
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">🐍</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Python Basics</div>
+                      <div style="color: var(--muted); font-size: 0.74rem">
+                        In Progress · 68%
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹7</span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: var(--paper);
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">📊</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Excel Masterclass</div>
+                      <div style="color: var(--muted); font-size: 0.74rem">
+                        In Progress · 30%
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹5</span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: var(--paper);
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">📱</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Instagram Growth</div>
+                      <div style="color: var(--muted); font-size: 0.74rem">
+                        In Progress · 15%
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹10</span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: #f0fdf4;
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                      border: 1px solid #bbf7d0;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">🎨</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Canva Design</div>
+                      <div style="color: #16a34a; font-size: 0.74rem">
+                        ✅ Completed
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹8</span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: #f0fdf4;
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                      border: 1px solid #bbf7d0;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">💰</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Stock Market Basics</div>
+                      <div style="color: #16a34a; font-size: 0.74rem">
+                        ✅ Completed
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹9</span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-6" style="font-size: 0.83rem">
+                  <div
+                    style="
+                      background: #f0fdf4;
+                      border-radius: 10px;
+                      padding: 0.75rem 0.9rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                      border: 1px solid #bbf7d0;
+                    "
+                  >
+                    <span style="font-size: 1.3rem">🗣️</span>
+                    <div class="flex-grow-1">
+                      <div style="font-weight: 600">Spoken English</div>
+                      <div style="color: #16a34a; font-size: 0.74rem">
+                        ✅ Completed
+                      </div>
+                    </div>
+                    <span
+                      style="
+                        color: #16a34a;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                      "
+                      >₹10</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="col-lg-4">
+            <!-- WALLET -->
+            <div id="wallet" class="mb-3">
+              <div class="wallet-card">
+                <div class="wallet-label">Wallet Balance</div>
+                <div class="wallet-balance">₹23.50</div>
+                <div
+                  style="
+                    font-size: 0.78rem;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-top: 0.2rem;
+                  "
+                >
+                  ≈ 2–4 more courses
+                </div>
+                <div class="wallet-actions">
+                  <button class="wallet-btn wallet-btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Add Money
+                  </button>
+                  <button class="wallet-btn wallet-btn-outline">
+                    <i class="bi bi-arrow-left-right me-1"></i>History
+                  </button>
+                </div>
+              </div>
+              <div class="section-card mt-2" style="padding: 1rem 1.25rem">
+                <div
+                  style="
+                    font-family: &quot;Syne&quot;, sans-serif;
+                    font-weight: 700;
+                    font-size: 0.88rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  Recent Transactions
+                </div>
+                <div class="wallet-transaction">
+                  <div>
+                    <div style="font-size: 0.83rem; font-weight: 500">
+                      Wallet Recharge
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--muted)">
+                      Dec 12, 2024
+                    </div>
+                  </div>
+                  <span class="txn-credit">+₹50.00</span>
+                </div>
+                <div class="wallet-transaction">
+                  <div>
+                    <div style="font-size: 0.83rem; font-weight: 500">
+                      Python Basics
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--muted)">
+                      Dec 14, 2024
+                    </div>
+                  </div>
+                  <span class="txn-debit">–₹7.00</span>
+                </div>
+                <div class="wallet-transaction">
+                  <div>
+                    <div style="font-size: 0.83rem; font-weight: 500">
+                      Spoken English
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--muted)">
+                      Dec 14, 2024
+                    </div>
+                  </div>
+                  <span class="txn-debit">–₹10.00</span>
+                </div>
+                <div class="wallet-transaction">
+                  <div>
+                    <div style="font-size: 0.83rem; font-weight: 500">
+                      Referral Bonus
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--muted)">
+                      Dec 15, 2024
+                    </div>
+                  </div>
+                  <span class="txn-credit">+₹5.00</span>
+                </div>
+                <div class="wallet-transaction">
+                  <div>
+                    <div style="font-size: 0.83rem; font-weight: 500">
+                      Excel Masterclass
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--muted)">
+                      Dec 16, 2024
+                    </div>
+                  </div>
+                  <span class="txn-debit">–₹5.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CERTIFICATES -->
+            <div id="certificates">
+              <div
+                class="section-card-title"
+                style="
+                  font-family: &quot;Syne&quot;, sans-serif;
+                  font-weight: 700;
+                  font-size: 1rem;
+                  padding-bottom: 0.75rem;
+                  border-bottom: 1px solid var(--border);
+                  margin-bottom: 1rem;
+                "
+              >
+                <i class="bi bi-award-fill" style="color: #f59e0b"></i> My
+                Certificates
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="cert-card">
+                    <div class="cert-icon">🎨</div>
+                    <div class="cert-name">Canva Design</div>
+                    <div class="cert-date">Dec 10, 2024</div>
+                    <a href="#" class="cert-download"
+                      ><i class="bi bi-download"></i> PDF</a
+                    >
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="cert-card">
+                    <div class="cert-icon">💰</div>
+                    <div class="cert-name">Stock Market</div>
+                    <div class="cert-date">Dec 11, 2024</div>
+                    <a href="#" class="cert-download"
+                      ><i class="bi bi-download"></i> PDF</a
+                    >
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="cert-card">
+                    <div class="cert-icon">🗣️</div>
+                    <div class="cert-name">Spoken English</div>
+                    <div class="cert-date">Dec 15, 2024</div>
+                    <a href="#" class="cert-download"
+                      ><i class="bi bi-download"></i> PDF</a
+                    >
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="cert-card"
+                    style="
+                      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+                      border-color: #7dd3fc;
+                    "
+                  >
+                    <div class="cert-icon">🌐</div>
+                    <div class="cert-name">HTML & CSS</div>
+                    <div class="cert-date">Dec 17, 2024</div>
+                    <a href="#" class="cert-download"
+                      ><i class="bi bi-download"></i> PDF</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <a
+                href="marketplace.html"
+                class="btn btn-sm w-100 mt-3"
+                style="
+                  background: var(--saffron-light);
+                  color: var(--saffron);
+                  border-radius: 50px;
+                  font-weight: 600;
+                  font-size: 0.82rem;
+                  padding: 0.5rem;
+                "
+              >
+                <i class="bi bi-plus me-1"></i>Earn More Certificates
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECOMMENDED -->
+        <div class="section-card mt-2">
+          <div class="section-card-title">
+            <i class="bi bi-stars text-warning"></i> Recommended for You
+          </div>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <div
+                style="
+                  background: var(--paper);
+                  border-radius: 10px;
+                  padding: 0.85rem;
+                  display: flex;
+                  gap: 0.75rem;
+                  align-items: center;
+                  border: 1px solid var(--border);
+                "
+              >
+                <div style="font-size: 1.6rem; width: 42px; text-align: center">
+                  📝
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    style="
+                      font-family: &quot;Syne&quot;, sans-serif;
+                      font-weight: 700;
+                      font-size: 0.85rem;
+                    "
+                  >
+                    Content Writing Basics
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--muted)">
+                    ★★★★★ · 1.2k reviews
+                  </div>
+                </div>
+                <a
+                  href="course_detail.html"
+                  style="
+                    background: var(--saffron);
+                    color: #fff;
+                    border-radius: 50px;
+                    font-size: 0.76rem;
+                    font-weight: 700;
+                    padding: 0.3rem 0.8rem;
+                    text-decoration: none;
+                    white-space: nowrap;
+                  "
+                  >₹6</a
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div
+                style="
+                  background: var(--paper);
+                  border-radius: 10px;
+                  padding: 0.85rem;
+                  display: flex;
+                  gap: 0.75rem;
+                  align-items: center;
+                  border: 1px solid var(--border);
+                "
+              >
+                <div style="font-size: 1.6rem; width: 42px; text-align: center">
+                  🔒
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    style="
+                      font-family: &quot;Syne&quot;, sans-serif;
+                      font-weight: 700;
+                      font-size: 0.85rem;
+                    "
+                  >
+                    Cybersecurity Fundamentals
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--muted)">
+                    ★★★★☆ · 876 reviews
+                  </div>
+                </div>
+                <a
+                  href="course_detail.html"
+                  style="
+                    background: var(--saffron);
+                    color: #fff;
+                    border-radius: 50px;
+                    font-size: 0.76rem;
+                    font-weight: 700;
+                    padding: 0.3rem 0.8rem;
+                    text-decoration: none;
+                    white-space: nowrap;
+                  "
+                  >₹9</a
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div
+                style="
+                  background: var(--paper);
+                  border-radius: 10px;
+                  padding: 0.85rem;
+                  display: flex;
+                  gap: 0.75rem;
+                  align-items: center;
+                  border: 1px solid var(--border);
+                "
+              >
+                <div style="font-size: 1.6rem; width: 42px; text-align: center">
+                  📦
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    style="
+                      font-family: &quot;Syne&quot;, sans-serif;
+                      font-weight: 700;
+                      font-size: 0.85rem;
+                    "
+                  >
+                    Amazon Seller Crash Course
+                  </div>
+                  <div style="font-size: 0.75rem; color: var(--muted)">
+                    ★★★★★ · 2.3k reviews
+                  </div>
+                </div>
+                <a
+                  href="course_detail.html"
+                  style="
+                    background: var(--saffron);
+                    color: #fff;
+                    border-radius: 50px;
+                    font-size: 0.76rem;
+                    font-weight: 700;
+                    padding: 0.3rem 0.8rem;
+                    text-decoration: none;
+                    white-space: nowrap;
+                  "
+                  >₹8</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /page-body -->
+    </div>
+    <!-- /main-content -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
