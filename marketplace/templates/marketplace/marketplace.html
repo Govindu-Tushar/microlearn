@@ -513,10 +513,14 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="instructor_dashboard.html">Teach</a>
+              <a class="nav-link" href="{% url 'instructor_dashboard' %}"
+                >Teach</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="student_dashboard.html">My Learning</a>
+              <a class="nav-link" href="{% url 'student_dashboard' %}"
+                >My Learning</a
+              >
             </li>
           </ul>
           <div class="d-flex gap-2 mt-2 mt-lg-0">
