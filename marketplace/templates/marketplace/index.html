@@ -794,9 +794,9 @@
         <div class="collapse navbar-collapse" id="navMain">
           <ul class="navbar-nav mx-auto gap-1">
             <li class="nav-item">
-              <a class="nav-link" href="marketplace.html"
-                ><i class="bi bi-grid me-1"></i>Courses</a
-              >
+              <a class="nav-link" href="{% url 'marketplace' %}">
+                <i class="bi bi-grid me-1"></i>Courses
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#categories"
@@ -804,7 +804,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="instructor_dashboard.html"
+              <a class="nav-link" href="{% url 'instructor_dashboard' %}"
                 ><i class="bi bi-mortarboard me-1"></i>Teach</a
               >
             </li>
@@ -815,7 +815,7 @@
             </li>
           </ul>
           <div class="d-flex gap-2 mt-2 mt-lg-0">
-            <a href="student_dashboard.html" class="btn btn-nav-login"
+            <a href="{% url 'student_dashboard' %}" class="btn btn-nav-login"
               >Log in</a
             >
             <a href="#" class="btn btn-nav-signup">Sign up free</a>
@@ -839,11 +839,11 @@
               subscription. No fluff. Pure knowledge.
             </p>
             <div class="d-flex gap-3 flex-wrap fade-up delay-3">
-              <a href="marketplace.html" class="btn btn-primary-ml"
+              <a href="{% url 'marketplace' %}" class="btn btn-primary-ml"
                 >Browse Courses</a
               >
               <a
-                href="instructor_dashboard.html"
+                href="{% url 'instructor_dashboard' %}"
                 class="btn"
                 style="
                   color: #fff;
@@ -1059,7 +1059,7 @@
               Curated picks loved by thousands of learners
             </p>
           </div>
-          <a href="marketplace.html" class="btn btn-outline-ml"
+          <a href="{% url 'marketplace' %}" class="btn btn-outline-ml"
             >View All <i class="bi bi-arrow-right ms-1"></i
           ></a>
         </div>
@@ -1326,84 +1326,84 @@
         </div>
         <div class="row g-3">
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">💻</span>
               <div class="cat-name">Technology</div>
               <div class="cat-count">312 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">💼</span>
               <div class="cat-name">Business</div>
               <div class="cat-count">198 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🎨</span>
               <div class="cat-name">Design</div>
               <div class="cat-count">145 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">📢</span>
               <div class="cat-name">Marketing</div>
               <div class="cat-count">167 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">💰</span>
               <div class="cat-name">Finance</div>
               <div class="cat-count">89 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🗣️</span>
               <div class="cat-name">Language</div>
               <div class="cat-count">76 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">📸</span>
               <div class="cat-name">Creative</div>
               <div class="cat-count">93 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🏥</span>
               <div class="cat-name">Health</div>
               <div class="cat-count">54 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🍳</span>
               <div class="cat-name">Cooking</div>
               <div class="cat-count">41 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🎵</span>
               <div class="cat-name">Music</div>
               <div class="cat-count">38 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">🧘</span>
               <div class="cat-name">Wellness</div>
               <div class="cat-count">29 courses</div>
             </a>
           </div>
           <div class="col-6 col-md-4 col-lg-2">
-            <a href="marketplace.html" class="cat-card">
+            <a href="{% url 'marketplace' %}" class="cat-card">
               <span class="cat-icon">➕</span>
               <div class="cat-name">More</div>
               <div class="cat-count">60+ courses</div>
@@ -1669,7 +1669,9 @@
                 <i class="bi bi-x-circle" style="color: var(--muted)"></i> No
                 bundle discount
               </div>
-              <a href="marketplace.html" class="btn-pricing btn-pricing-outline"
+              <a
+                href="{% url 'marketplace' %}"
+                class="btn-pricing btn-pricing-outline"
                 >Browse Courses</a
               >
             </div>
@@ -1701,7 +1703,7 @@
                 <i class="bi bi-check-circle-fill"></i> Never expires
               </div>
               <a
-                href="student_dashboard.html"
+                href="{% url 'student_dashboard' %}"
                 class="btn-pricing btn-pricing-white"
                 >Get Bundle Deal</a
               >
@@ -1730,7 +1732,7 @@
                 <i class="bi bi-check-circle-fill"></i> Course management tools
               </div>
               <a
-                href="instructor_dashboard.html"
+                href="{% url 'instructor_dashboard' %}"
                 class="btn-pricing btn-pricing-outline"
                 >Start Teaching</a
               >
@@ -1814,7 +1816,7 @@
         </p>
         <div class="d-flex gap-3 justify-content-center flex-wrap">
           <a
-            href="marketplace.html"
+            href="{% url 'marketplace' %}"
             class="btn"
             style="
               background: #fff;
@@ -1827,7 +1829,7 @@
             >Browse Courses</a
           >
           <a
-            href="instructor_dashboard.html"
+            href="{% url 'instructor_dashboard' %}"
             class="btn"
             style="
               background: transparent;
@@ -1864,7 +1866,7 @@
           </div>
           <div class="col-6 col-md-2 offset-lg-1">
             <h6>Learn</h6>
-            <a href="marketplace.html">All Courses</a>
+            <a href="{% url 'marketplace' %}">All Courses</a>
             <a href="#">Technology</a>
             <a href="#">Business</a>
             <a href="#">Design</a>
@@ -1872,7 +1874,7 @@
           </div>
           <div class="col-6 col-md-2">
             <h6>Teach</h6>
-            <a href="instructor_dashboard.html">Become Instructor</a>
+            <a href="{% url 'instructor_dashboard' %}">Become Instructor</a>
             <a href="#">Upload Course</a>
             <a href="#">Earnings</a>
             <a href="#">Guidelines</a>

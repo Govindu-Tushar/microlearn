@@ -1,0 +1,1743 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout – MicroLearn</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Razorpay Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #faf8f4;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --teal-light: #f0fdfa;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --success: #16a34a;
+        --success-light: #f0fdf4;
+        --radius: 16px;
+        --radius-sm: 10px;
+        --shadow: 0 2px 20px rgba(13, 13, 13, 0.08);
+        --shadow-lg: 0 12px 48px rgba(13, 13, 13, 0.14);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* ── TOPBAR ── */
+      .topbar {
+        background: rgba(250, 248, 244, 0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.7rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .topbar .brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .topbar .brand span {
+        color: var(--saffron);
+      }
+      .topbar .secure-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .topbar .secure-badge i {
+        color: var(--success);
+        font-size: 0.9rem;
+      }
+      .steps-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .step.done {
+        color: var(--success);
+      }
+      .step.active {
+        color: var(--saffron);
+      }
+      .step-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .step.done .step-dot {
+        background: var(--success);
+        color: #fff;
+      }
+      .step.active .step-dot {
+        background: var(--saffron);
+        color: #fff;
+      }
+      .step.pending .step-dot {
+        background: var(--border);
+        color: var(--muted);
+      }
+      .step-divider {
+        width: 28px;
+        height: 2px;
+        background: var(--border);
+        border-radius: 2px;
+      }
+      .step-divider.done {
+        background: var(--success);
+      }
+
+      /* ── PAGE LAYOUT ── */
+      .checkout-wrap {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 2.5rem auto;
+        padding: 0 1.25rem 3rem;
+      }
+      @media (max-width: 900px) {
+        .checkout-wrap {
+          grid-template-columns: 1fr;
+        }
+        .order-summary-col {
+          order: -1;
+        }
+      }
+
+      /* ── CARDS ── */
+      .card-panel {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .card-panel-header {
+        padding: 1.1rem 1.4rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .card-panel-header h2 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .card-panel-header .step-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--saffron);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .card-panel-body {
+        padding: 1.4rem;
+      }
+
+      /* ── FORM FIELDS ── */
+      .field-row {
+        margin-bottom: 1.1rem;
+      }
+      .field-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 0.38rem;
+        display: block;
+      }
+      .field-label span {
+        color: var(--saffron);
+      }
+      .field-input {
+        width: 100%;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.65rem 0.9rem;
+        font-size: 0.9rem;
+        font-family: "DM Sans", sans-serif;
+        outline: none;
+        transition: 0.15s;
+        background: #fff;
+        color: var(--ink);
+      }
+      .field-input:focus {
+        border-color: var(--saffron);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      }
+      .field-input.error {
+        border-color: #ef4444;
+      }
+      .field-error {
+        font-size: 0.73rem;
+        color: #ef4444;
+        margin-top: 0.3rem;
+        display: none;
+      }
+      .field-row.has-error .field-error {
+        display: block;
+      }
+      .field-row.has-error .field-input {
+        border-color: #ef4444;
+      }
+      .field-hint {
+        font-size: 0.73rem;
+        color: var(--muted);
+        margin-top: 0.25rem;
+      }
+
+      /* ── PAYMENT METHOD SELECTOR ── */
+      .pay-method-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+        margin-bottom: 1.2rem;
+      }
+      .pay-method-btn {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem 0.6rem;
+        cursor: pointer;
+        transition: 0.18s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        background: #fff;
+        font-family: "DM Sans", sans-serif;
+      }
+      .pay-method-btn:hover {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+      .pay-method-btn.active {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+      .pay-method-btn .pm-icon {
+        font-size: 1.4rem;
+      }
+      .pay-method-btn .pm-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .pay-method-btn .pm-sub {
+        font-size: 0.65rem;
+        color: var(--muted);
+      }
+      .pay-method-btn.active .pm-label {
+        color: var(--saffron);
+      }
+
+      /* ── UPI SECTION ── */
+      .upi-input-wrap {
+        position: relative;
+      }
+      .upi-input-wrap .upi-icon {
+        position: absolute;
+        left: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        color: var(--muted);
+      }
+      .upi-input-wrap .field-input {
+        padding-left: 2.4rem;
+      }
+      .upi-verify-btn {
+        position: absolute;
+        right: 0.45rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        padding: 0.35rem 0.8rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .upi-verify-btn:hover {
+        background: var(--saffron-dark);
+      }
+      .upi-verified {
+        display: none;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        color: var(--success);
+        font-weight: 600;
+        margin-top: 0.4rem;
+      }
+      .upi-verified.show {
+        display: flex;
+      }
+
+      /* ── WALLET BALANCE ── */
+      .wallet-use-row {
+        background: var(--saffron-light);
+        border: 1px solid rgba(249, 115, 22, 0.2);
+        border-radius: var(--radius-sm);
+        padding: 0.85rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .wallet-info strong {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--saffron);
+      }
+      .wallet-info small {
+        font-size: 0.73rem;
+        color: var(--muted);
+        display: block;
+      }
+      .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-thumb {
+        position: absolute;
+        inset: 0;
+        border-radius: 50px;
+        background: var(--border);
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .toggle-thumb::before {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        left: 3px;
+        top: 3px;
+        transition: 0.2s;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      }
+      .toggle-switch input:checked + .toggle-thumb {
+        background: var(--saffron);
+      }
+      .toggle-switch input:checked + .toggle-thumb::before {
+        transform: translateX(20px);
+      }
+
+      /* ── COUPON ── */
+      .coupon-row {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .coupon-row .field-input {
+        flex: 1;
+      }
+      .coupon-apply-btn {
+        background: var(--ink);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 0.65rem 1.1rem;
+        font-size: 0.84rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.15s;
+        white-space: nowrap;
+      }
+      .coupon-apply-btn:hover {
+        background: var(--saffron);
+      }
+      .coupon-success {
+        display: none;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        color: var(--success);
+        font-weight: 600;
+        margin-top: 0.4rem;
+      }
+      .coupon-success.show {
+        display: flex;
+      }
+
+      /* ── PAY BUTTON ── */
+      .pay-btn {
+        width: 100%;
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 800;
+        font-family: "Syne", sans-serif;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        letter-spacing: -0.2px;
+        margin-top: 1.2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .pay-btn:hover {
+        background: var(--saffron-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 24px rgba(249, 115, 22, 0.35);
+      }
+      .pay-btn:active {
+        transform: translateY(0);
+      }
+      .pay-btn.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+      .pay-btn .spinner {
+        display: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      .pay-btn.loading .spinner {
+        display: block;
+      }
+      .pay-btn.loading .btn-text {
+        opacity: 0.5;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ── ORDER SUMMARY ── */
+      .summary-course-card {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        padding-bottom: 1.1rem;
+        margin-bottom: 1.1rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .summary-thumb {
+        width: 72px;
+        height: 54px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7rem;
+        flex-shrink: 0;
+      }
+      .summary-course-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.92rem;
+        line-height: 1.3;
+        margin-bottom: 0.25rem;
+      }
+      .summary-course-meta {
+        font-size: 0.75rem;
+        color: var(--muted);
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .summary-rating {
+        color: #f59e0b;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .price-breakdown {
+      }
+      .price-line {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.87rem;
+        padding: 0.38rem 0;
+      }
+      .price-line.divider {
+        border-top: 1px solid var(--border);
+        margin-top: 0.4rem;
+        padding-top: 0.9rem;
+      }
+      .price-line.total {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.05rem;
+      }
+      .price-line .label {
+        color: var(--muted);
+      }
+      .price-line.total .label {
+        color: var(--ink);
+      }
+      .discount-tag {
+        color: var(--success);
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .savings-pill {
+        background: var(--success-light);
+        border: 1px solid #bbf7d0;
+        border-radius: 50px;
+        padding: 0.35rem 0.9rem;
+        font-size: 0.77rem;
+        font-weight: 700;
+        color: var(--success);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        margin-top: 0.6rem;
+      }
+
+      /* ── TRUST BADGES ── */
+      .trust-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+      .trust-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .trust-badge i {
+        color: var(--success);
+        font-size: 0.85rem;
+      }
+
+      /* ── SUCCESS OVERLAY ── */
+      .success-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        backdrop-filter: blur(4px);
+      }
+      .success-overlay.show {
+        display: flex;
+      }
+      .success-modal {
+        background: #fff;
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.85);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .success-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        display: block;
+        animation: bounce 0.5s 0.2s ease both;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      .success-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+      }
+      .success-sub {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+      .success-detail {
+        background: var(--paper);
+        border-radius: var(--radius-sm);
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: left;
+      }
+      .success-detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.84rem;
+        padding: 0.3rem 0;
+      }
+      .success-detail-row .sk {
+        color: var(--muted);
+      }
+      .success-detail-row .sv {
+        font-weight: 600;
+      }
+      .btn-continue {
+        display: block;
+        width: 100%;
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.8rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: 0.15s;
+        text-decoration: none;
+      }
+      .btn-continue:hover {
+        background: var(--saffron-dark);
+        color: #fff;
+      }
+      .btn-receipt {
+        display: block;
+        width: 100%;
+        background: transparent;
+        color: var(--ink);
+        border: 1.5px solid var(--border);
+        border-radius: 50px;
+        padding: 0.7rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        cursor: pointer;
+        transition: 0.15s;
+        margin-top: 0.6rem;
+      }
+      .btn-receipt:hover {
+        border-color: var(--ink);
+        background: var(--paper);
+      }
+
+      /* ── RAZORPAY BRAND ── */
+      .rzp-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        margin-top: 1rem;
+        font-size: 0.73rem;
+        color: var(--muted);
+      }
+      .rzp-brand img {
+        height: 16px;
+        opacity: 0.6;
+      }
+      .rzp-logo-text {
+        font-weight: 700;
+        color: #072654;
+        letter-spacing: 0.3px;
+      }
+
+      /* ── ANIMATIONS ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.45s ease both;
+      }
+      .delay-1 {
+        animation-delay: 0.08s;
+      }
+      .delay-2 {
+        animation-delay: 0.16s;
+      }
+      .delay-3 {
+        animation-delay: 0.24s;
+      }
+
+      /* ── MISC ── */
+      .section-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 1.1rem 0;
+      }
+      .method-content {
+        display: none;
+      }
+      .method-content.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOPBAR -->
+    <nav class="topbar">
+      <div class="container">
+        <div
+          class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+        >
+          <a class="brand" href="index.html">Micro<span>Learn</span></a>
+          <div class="steps-bar d-none d-sm-flex">
+            <div class="step done">
+              <div class="step-dot">
+                <i class="bi bi-check" style="font-size: 0.6rem"></i>
+              </div>
+              <span>Cart</span>
+            </div>
+            <div class="step-divider done"></div>
+            <div class="step active">
+              <div class="step-dot">2</div>
+              <span>Checkout</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step pending">
+              <div class="step-dot">3</div>
+              <span>Confirm</span>
+            </div>
+          </div>
+          <div class="secure-badge">
+            <i class="bi bi-shield-lock-fill"></i> 100% Secure Checkout
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CHECKOUT LAYOUT -->
+    <div class="checkout-wrap">
+      <!-- ── LEFT: FORM ── -->
+      <div class="left-col">
+        <!-- CONTACT INFO -->
+        <div class="card-panel fade-up mb-3">
+          <div class="card-panel-header">
+            <div class="step-num">1</div>
+            <h2>Contact Information</h2>
+          </div>
+          <div class="card-panel-body">
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <div class="field-row" id="field-name">
+                  <label class="field-label" for="fullName"
+                    >Full Name <span>*</span></label
+                  >
+                  <input
+                    class="field-input"
+                    type="text"
+                    id="fullName"
+                    placeholder="Ravi Kumar"
+                    autocomplete="name"
+                  />
+                  <div class="field-error">Please enter your name</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="field-row" id="field-email">
+                  <label class="field-label" for="email"
+                    >Email Address <span>*</span></label
+                  >
+                  <input
+                    class="field-input"
+                    type="email"
+                    id="email"
+                    placeholder="ravi@example.com"
+                    autocomplete="email"
+                  />
+                  <div class="field-error">Enter a valid email</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="field-row" id="field-phone">
+                  <label class="field-label" for="phone"
+                    >Phone Number <span>*</span></label
+                  >
+                  <input
+                    class="field-input"
+                    type="tel"
+                    id="phone"
+                    placeholder="+91 98765 43210"
+                    autocomplete="tel"
+                    maxlength="13"
+                  />
+                  <div class="field-error">Enter a valid 10-digit number</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="field-row">
+                  <label class="field-label" for="state">State</label>
+                  <select class="field-input" id="state">
+                    <option value="">Select state</option>
+                    <option>Andhra Pradesh</option>
+                    <option>Delhi</option>
+                    <option>Gujarat</option>
+                    <option>Karnataka</option>
+                    <option>Kerala</option>
+                    <option>Maharashtra</option>
+                    <option>Rajasthan</option>
+                    <option selected>Telangana</option>
+                    <option>Tamil Nadu</option>
+                    <option>Uttar Pradesh</option>
+                    <option>West Bengal</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WALLET BALANCE -->
+        <div class="card-panel fade-up delay-1 mb-3">
+          <div class="card-panel-header">
+            <i class="bi bi-wallet2 text-warning fs-5"></i>
+            <h2>MicroLearn Wallet</h2>
+          </div>
+          <div class="card-panel-body">
+            <div class="wallet-use-row">
+              <div class="wallet-info">
+                <strong>₹23.50 available</strong>
+                <small>Apply wallet balance to reduce your total</small>
+              </div>
+              <label class="toggle-switch">
+                <input
+                  type="checkbox"
+                  id="walletToggle"
+                  checked
+                  onchange="recalcTotal()"
+                />
+                <span class="toggle-thumb"></span>
+              </label>
+            </div>
+            <div class="field-hint mt-2" id="walletNote">
+              <i class="bi bi-check-circle-fill text-success me-1"></i>
+              ₹7.00 from wallet will be applied. Remaining ₹0 due now.
+            </div>
+          </div>
+        </div>
+
+        <!-- COUPON -->
+        <div class="card-panel fade-up delay-1 mb-3">
+          <div class="card-panel-header">
+            <i class="bi bi-tag-fill text-success fs-5"></i>
+            <h2>Coupon / Promo Code</h2>
+          </div>
+          <div class="card-panel-body">
+            <div class="coupon-row">
+              <input
+                class="field-input"
+                type="text"
+                id="couponInput"
+                placeholder="Enter coupon code (e.g. MICRO20)"
+                style="text-transform: uppercase"
+              />
+              <button class="coupon-apply-btn" onclick="applyCoupon()">
+                Apply
+              </button>
+            </div>
+            <div class="coupon-success" id="couponSuccess">
+              <i class="bi bi-check-circle-fill"></i> Coupon MICRO20 applied! ₹0
+              extra saved.
+            </div>
+            <div class="field-hint mt-1">
+              Try <strong>MICRO20</strong> for a test discount
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT METHOD -->
+        <div class="card-panel fade-up delay-2 mb-3">
+          <div class="card-panel-header">
+            <div class="step-num">2</div>
+            <h2>Payment Method</h2>
+          </div>
+          <div class="card-panel-body">
+            <div class="pay-method-grid">
+              <button
+                class="pay-method-btn active"
+                id="pm-upi"
+                onclick="selectMethod('upi')"
+              >
+                <div class="pm-icon">📲</div>
+                <div class="pm-label">UPI</div>
+                <div class="pm-sub">GPay · PhonePe · Paytm</div>
+              </button>
+              <button
+                class="pay-method-btn"
+                id="pm-card"
+                onclick="selectMethod('card')"
+              >
+                <div class="pm-icon">💳</div>
+                <div class="pm-label">Card</div>
+                <div class="pm-sub">Credit / Debit</div>
+              </button>
+              <button
+                class="pay-method-btn"
+                id="pm-netbanking"
+                onclick="selectMethod('netbanking')"
+              >
+                <div class="pm-icon">🏦</div>
+                <div class="pm-label">Net Banking</div>
+                <div class="pm-sub">All major banks</div>
+              </button>
+              <button
+                class="pay-method-btn"
+                id="pm-emi"
+                onclick="selectMethod('emi')"
+              >
+                <div class="pm-icon">🔄</div>
+                <div class="pm-label">EMI</div>
+                <div class="pm-sub">0% interest plans</div>
+              </button>
+            </div>
+
+            <!-- UPI -->
+            <div class="method-content active" id="mc-upi">
+              <div class="field-row">
+                <label class="field-label">UPI ID <span>*</span></label>
+                <div class="upi-input-wrap">
+                  <i class="bi bi-phone upi-icon"></i>
+                  <input
+                    class="field-input"
+                    type="text"
+                    id="upiId"
+                    placeholder="yourname@upi"
+                    style="padding-left: 2.4rem; padding-right: 5.5rem"
+                  />
+                  <button class="upi-verify-btn" onclick="verifyUPI()">
+                    Verify
+                  </button>
+                </div>
+                <div class="upi-verified" id="upiVerified">
+                  <i class="bi bi-patch-check-fill"></i> UPI ID verified
+                </div>
+                <div class="field-hint">Or pay via QR code at checkout</div>
+              </div>
+              <div class="d-flex gap-2 flex-wrap mt-1">
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.3rem 0.65rem;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.3rem;
+                    cursor: pointer;
+                  "
+                  onclick="fillUPI('ravi@oksbi')"
+                >
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/nicktindall/cyclon.js@master/test/logo.png"
+                    style="height: 14px; opacity: 0"
+                    alt=""
+                  />
+                  📱 @oksbi
+                </div>
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.3rem 0.65rem;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.3rem;
+                    cursor: pointer;
+                  "
+                  onclick="fillUPI('ravi@ybl')"
+                >
+                  📲 @ybl
+                </div>
+                <div
+                  style="
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 0.3rem 0.65rem;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.3rem;
+                    cursor: pointer;
+                  "
+                  onclick="fillUPI('ravi@paytm')"
+                >
+                  💸 @paytm
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD -->
+            <div class="method-content" id="mc-card">
+              <div class="field-row">
+                <label class="field-label">Card Number <span>*</span></label>
+                <input
+                  class="field-input"
+                  type="text"
+                  id="cardNum"
+                  placeholder="4111 1111 1111 1111"
+                  maxlength="19"
+                  oninput="fmtCard(this)"
+                />
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="field-row">
+                    <label class="field-label">Expiry <span>*</span></label>
+                    <input
+                      class="field-input"
+                      type="text"
+                      placeholder="MM / YY"
+                      maxlength="7"
+                      oninput="fmtExpiry(this)"
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="field-row">
+                    <label class="field-label">CVV <span>*</span></label>
+                    <input
+                      class="field-input"
+                      type="password"
+                      placeholder="•••"
+                      maxlength="4"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="field-row">
+                <label class="field-label">Cardholder Name</label>
+                <input
+                  class="field-input"
+                  type="text"
+                  placeholder="Name on card"
+                />
+              </div>
+              <div
+                class="d-flex gap-2 align-items-center mt-1"
+                style="font-size: 0.75rem; color: var(--muted)"
+              >
+                <i class="bi bi-shield-lock-fill text-success"></i> Card data is
+                encrypted via Razorpay. We never store card details.
+              </div>
+            </div>
+
+            <!-- NET BANKING -->
+            <div class="method-content" id="mc-netbanking">
+              <div class="field-row">
+                <label class="field-label">Select Bank</label>
+                <select class="field-input" id="bankSelect">
+                  <option value="">Choose your bank</option>
+                  <option value="SBIN">State Bank of India (SBI)</option>
+                  <option value="HDFC">HDFC Bank</option>
+                  <option value="ICIC">ICICI Bank</option>
+                  <option value="AXIB">Axis Bank</option>
+                  <option value="PUNB">Punjab National Bank</option>
+                  <option value="UBIN">Union Bank</option>
+                  <option value="CNRB">Canara Bank</option>
+                  <option value="KOTAK">Kotak Mahindra Bank</option>
+                </select>
+              </div>
+              <div
+                style="
+                  background: var(--paper);
+                  border-radius: var(--radius-sm);
+                  padding: 0.7rem 0.9rem;
+                  font-size: 0.78rem;
+                  color: var(--muted);
+                "
+              >
+                <i class="bi bi-info-circle me-1"></i> You will be redirected to
+                your bank's secure netbanking portal to complete payment.
+              </div>
+            </div>
+
+            <!-- EMI -->
+            <div class="method-content" id="mc-emi">
+              <div
+                style="
+                  background: var(--saffron-light);
+                  border: 1px solid rgba(249, 115, 22, 0.2);
+                  border-radius: var(--radius-sm);
+                  padding: 0.9rem;
+                  font-size: 0.83rem;
+                "
+              >
+                <i class="bi bi-info-circle-fill text-warning me-1"></i>
+                Since the course costs only <strong>₹7</strong>, EMI is not
+                applicable. EMI is available for purchases above ₹500.
+              </div>
+              <div class="mt-2" style="font-size: 0.8rem; color: var(--muted)">
+                Switch to UPI or Card for this purchase.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAY BUTTON -->
+        <button
+          class="pay-btn fade-up delay-3"
+          id="payBtn"
+          onclick="window.location.href = '/acknowledgment/'"
+        >
+          <div class="spinner" id="paySpinner"></div>
+          <span class="btn-text" id="payBtnText">
+            <i class="bi bi-lock-fill me-1"></i> Pay Securely ·
+            <span id="btnAmount">₹7.00</span>
+          </span>
+        </button>
+
+        <!-- RAZORPAY BRAND -->
+        <div class="rzp-brand fade-up delay-3">
+          <i class="bi bi-shield-check text-success"></i>
+          Powered by <span class="rzp-logo-text">Razorpay</span> &nbsp;·&nbsp;
+          PCI-DSS Compliant &nbsp;·&nbsp; 256-bit SSL
+        </div>
+      </div>
+
+      <!-- ── RIGHT: ORDER SUMMARY ── -->
+      <div class="right-col order-summary-col">
+        <div class="card-panel fade-up" style="position: sticky; top: 80px">
+          <div class="card-panel-header">
+            <i class="bi bi-receipt text-muted fs-5"></i>
+            <h2>Order Summary</h2>
+          </div>
+          <div class="card-panel-body">
+            <!-- COURSE BEING PURCHASED -->
+            <div class="summary-course-card">
+              <div
+                class="summary-thumb"
+                style="background: linear-gradient(135deg, #fef3c7, #fed7aa)"
+              >
+                🐍
+              </div>
+              <div>
+                <div class="summary-course-title">Python Basics in 2 Hours</div>
+                <div class="summary-rating">
+                  ★★★★★
+                  <span style="color: var(--muted); font-weight: 400"
+                    >4.9 (2,340 reviews)</span
+                  >
+                </div>
+                <div class="summary-course-meta mt-1">
+                  <span><i class="bi bi-person me-1"></i>Rahul Sharma</span>
+                  <span><i class="bi bi-clock me-1"></i>2.5 hrs</span>
+                  <span><i class="bi bi-play-circle me-1"></i>12 lessons</span>
+                </div>
+                <div
+                  class="mt-1"
+                  style="
+                    font-size: 0.73rem;
+                    color: var(--muted);
+                    display: flex;
+                    gap: 0.75rem;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <span
+                    ><i class="bi bi-translate me-1"></i>Hindi + English</span
+                  >
+                  <span
+                    ><i class="bi bi-award me-1"></i>Certificate included</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- PRICE BREAKDOWN -->
+            <div class="price-breakdown">
+              <div class="price-line">
+                <span class="label">Course price</span>
+                <span>₹7.00</span>
+              </div>
+              <div class="price-line">
+                <span class="label">Original MRP</span>
+                <span style="text-decoration: line-through; color: var(--muted)"
+                  >₹499.00</span
+                >
+              </div>
+              <div class="price-line">
+                <span class="label">MicroLearn discount</span>
+                <span class="discount-tag">–₹492.00 (98% off!)</span>
+              </div>
+              <div class="price-line" id="walletLine">
+                <span class="label">Wallet credit applied</span>
+                <span class="discount-tag" id="walletDiscount">–₹7.00</span>
+              </div>
+              <div class="price-line" id="couponLine" style="display: none">
+                <span class="label">Promo (MICRO20)</span>
+                <span class="discount-tag">–₹0.00</span>
+              </div>
+              <div class="price-line divider total">
+                <span class="label">Total Due</span>
+                <span id="totalAmount">₹0.00</span>
+              </div>
+              <div class="savings-pill">
+                <i class="bi bi-emoji-smile-fill"></i>
+                You're saving <strong>₹492</strong> on this course!
+              </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- WHAT YOU GET -->
+            <div
+              style="
+                font-family: &quot;Syne&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 0.82rem;
+                margin-bottom: 0.6rem;
+                color: var(--muted);
+              "
+            >
+              WHAT YOU GET
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.4rem">
+              <div
+                style="
+                  font-size: 0.82rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="bi bi-infinity text-success"></i> Lifetime access
+              </div>
+              <div
+                style="
+                  font-size: 0.82rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="bi bi-phone text-primary"></i> Mobile + Desktop
+              </div>
+              <div
+                style="
+                  font-size: 0.82rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="bi bi-award text-warning"></i> Completion certificate
+              </div>
+              <div
+                style="
+                  font-size: 0.82rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="bi bi-arrow-counterclockwise text-danger"></i> 7-day
+                money-back guarantee
+              </div>
+              <div
+                style="
+                  font-size: 0.82rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <i class="bi bi-download text-info"></i> Downloadable resources
+              </div>
+            </div>
+
+            <!-- TRUST -->
+            <div class="trust-row">
+              <div class="trust-badge">
+                <i class="bi bi-shield-check-fill"></i> Secure payment
+              </div>
+              <div class="trust-badge">
+                <i class="bi bi-credit-card-fill"></i> UPI / Cards
+              </div>
+              <div class="trust-badge">
+                <i class="bi bi-star-fill"></i> 4.9 rated
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /checkout-wrap -->
+
+    <!-- ── SUCCESS OVERLAY ── -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="success-modal">
+        <span class="success-icon">🎉</span>
+        <div class="success-title">Payment Successful!</div>
+        <div class="success-sub">
+          You now have lifetime access to the course. Start learning right away!
+        </div>
+        <div class="success-detail">
+          <div class="success-detail-row">
+            <span class="sk">Course</span
+            ><span class="sv">Python Basics in 2 Hours</span>
+          </div>
+          <div class="success-detail-row">
+            <span class="sk">Amount Paid</span
+            ><span class="sv" id="paidAmount">₹0.00</span>
+          </div>
+          <div class="success-detail-row">
+            <span class="sk">Payment ID</span
+            ><span
+              class="sv"
+              id="paymentId"
+              style="font-family: monospace; font-size: 0.8rem"
+              >–</span
+            >
+          </div>
+          <div class="success-detail-row">
+            <span class="sk">Order ID</span
+            ><span
+              class="sv"
+              id="orderId"
+              style="font-family: monospace; font-size: 0.8rem"
+              >–</span
+            >
+          </div>
+        </div>
+        <a href="student_dashboard.html" class="btn-continue"
+          >Go to My Courses →</a
+        >
+        <button class="btn-receipt" onclick="printReceipt()">
+          <i class="bi bi-download me-1"></i>Download Receipt
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      /* ─────────────────────────────────────────
+   CONFIG — Replace with your actual keys
+   ───────────────────────────────────────── */
+      const RAZORPAY_KEY_ID = "rzp_test_XXXXXXXXXXXXXXXXXX"; // ← your Razorpay Test Key ID
+      const COURSE_PRICE_PAISE = 700; // ₹7.00 in paise (100 paise = ₹1)
+      const COURSE_PRICE_INR = 7.0;
+      const COURSE_TITLE = "Python Basics in 2 Hours";
+      const MERCHANT_NAME = "MicroLearn";
+
+      /* ─────────────────────────────────────────
+   STATE
+   ───────────────────────────────────────── */
+      let walletBalance = 23.5;
+      let walletApplied = true;
+      let couponApplied = false;
+      let couponDiscount = 0;
+      let activeMethod = "upi";
+      let upiVerified = false;
+
+      /* ─────────────────────────────────────────
+   TOTAL RECALCULATION
+   ───────────────────────────────────────── */
+      function recalcTotal() {
+        walletApplied = document.getElementById("walletToggle").checked;
+        let due = COURSE_PRICE_INR - couponDiscount;
+        let walletUsed = 0;
+
+        if (walletApplied) {
+          walletUsed = Math.min(walletBalance, due);
+          due -= walletUsed;
+        }
+
+        due = Math.max(0, due);
+
+        // Update UI
+        document.getElementById("totalAmount").textContent =
+          `₹${due.toFixed(2)}`;
+        document.getElementById("btnAmount").textContent = `₹${due.toFixed(2)}`;
+
+        const walletLine = document.getElementById("walletLine");
+        const walletDiscount = document.getElementById("walletDiscount");
+        if (walletApplied && walletUsed > 0) {
+          walletLine.style.display = "";
+          walletDiscount.textContent = `–₹${walletUsed.toFixed(2)}`;
+          document.getElementById("walletNote").innerHTML =
+            `<i class="bi bi-check-circle-fill text-success me-1"></i>₹${walletUsed.toFixed(2)} from wallet applied. ${due === 0 ? "Nothing more to pay!" : `₹${due.toFixed(2)} due now.`}`;
+        } else {
+          walletLine.style.display = "none";
+          document.getElementById("walletNote").innerHTML =
+            `<i class="bi bi-info-circle text-muted me-1"></i>Wallet balance will <strong>not</strong> be applied.`;
+        }
+      }
+
+      /* ─────────────────────────────────────────
+   PAYMENT METHOD SWITCH
+   ───────────────────────────────────────── */
+      function selectMethod(method) {
+        activeMethod = method;
+        document
+          .querySelectorAll(".pay-method-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".method-content")
+          .forEach((c) => c.classList.remove("active"));
+        document.getElementById("pm-" + method).classList.add("active");
+        document.getElementById("mc-" + method).classList.add("active");
+      }
+
+      /* ─────────────────────────────────────────
+   UPI HELPERS
+   ───────────────────────────────────────── */
+      function fillUPI(id) {
+        document.getElementById("upiId").value = id;
+      }
+
+      function verifyUPI() {
+        const val = document.getElementById("upiId").value.trim();
+        if (!val.includes("@")) {
+          alert("Please enter a valid UPI ID (e.g. name@upi)");
+          return;
+        }
+        // Simulate async verify
+        const btn = document.querySelector(".upi-verify-btn");
+        btn.textContent = "...";
+        setTimeout(() => {
+          btn.textContent = "✓";
+          btn.style.background = "var(--success)";
+          document.getElementById("upiVerified").classList.add("show");
+          upiVerified = true;
+        }, 900);
+      }
+
+      /* ─────────────────────────────────────────
+   COUPON
+   ───────────────────────────────────────── */
+      function applyCoupon() {
+        const code = document
+          .getElementById("couponInput")
+          .value.trim()
+          .toUpperCase();
+        if (code === "MICRO20") {
+          couponApplied = true;
+          couponDiscount = 0; // price is already ₹7, discount = 0 extra
+          document.getElementById("couponSuccess").classList.add("show");
+          document.getElementById("couponLine").style.display = "";
+          recalcTotal();
+        } else if (code) {
+          alert("Invalid coupon code. Try MICRO20!");
+        }
+      }
+
+      /* ─────────────────────────────────────────
+   FORM VALIDATION
+   ───────────────────────────────────────── */
+      function validateForm() {
+        let valid = true;
+
+        const name = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document
+          .getElementById("phone")
+          .value.trim()
+          .replace(/\D/g, "");
+
+        const setErr = (id, show) => {
+          document.getElementById(id).classList.toggle("has-error", show);
+          if (show) valid = false;
+        };
+
+        setErr("field-name", name.length < 2);
+        setErr("field-email", !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        setErr("field-phone", phone.length < 10);
+
+        return valid;
+      }
+
+      /* ─────────────────────────────────────────
+   CALCULATE DUE AMOUNT
+   ───────────────────────────────────────── */
+      function getDueAmountPaise() {
+        let due = COURSE_PRICE_INR - couponDiscount;
+        if (walletApplied) {
+          due -= Math.min(walletBalance, due);
+        }
+        due = Math.max(0, due);
+        return Math.round(due * 100); // paise
+      }
+
+      /* ─────────────────────────────────────────
+   INITIATE RAZORPAY PAYMENT
+   ───────────────────────────────────────── */
+      function initiatePayment() {
+        if (!validateForm()) return;
+
+        const duePaise = getDueAmountPaise();
+        const name = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document
+          .getElementById("phone")
+          .value.trim()
+          .replace(/\D/g, "")
+          .slice(-10);
+
+        // Show loading
+        const btn = document.getElementById("payBtn");
+        btn.classList.add("loading");
+
+        // ── If due is 0 (fully covered by wallet) ──
+        if (duePaise === 0) {
+          setTimeout(() => {
+            btn.classList.remove("loading");
+            showSuccess({
+              razorpay_payment_id: "WALLET_PAY",
+              razorpay_order_id: "ML_" + Date.now(),
+            });
+          }, 800);
+          return;
+        }
+
+        // ── Razorpay Options ──
+        const options = {
+          key: RAZORPAY_KEY_ID, // Your Razorpay Key ID
+          amount: duePaise, // Amount in paise
+          currency: "INR",
+          name: MERCHANT_NAME,
+          description: COURSE_TITLE,
+          image: "", // Optional: your logo URL
+          // order_id: 'order_XXXXXXXXX', // Pass server-generated Razorpay order_id here
+          prefill: {
+            name: name,
+            email: email,
+            contact: phone,
+            ...(activeMethod === "upi" && document.getElementById("upiId").value
+              ? { vpa: document.getElementById("upiId").value.trim() }
+              : {}),
+          },
+          method: {
+            // Pre-select payment method in Razorpay modal
+            ...(activeMethod === "card" ? { card: true } : {}),
+            ...(activeMethod === "upi" ? { upi: true } : {}),
+            ...(activeMethod === "netbanking" ? { netbanking: true } : {}),
+          },
+          theme: {
+            color: "#f97316", // Saffron — matches MicroLearn brand
+            backdrop_color: "rgba(13,13,13,0.6)",
+            hide_topbar: false,
+          },
+          notes: {
+            course_id: "COURSE_PYTHON_BASICS",
+            course_title: COURSE_TITLE,
+            student_email: email,
+            wallet_used: walletApplied
+              ? String(
+                  Math.min(walletBalance, COURSE_PRICE_INR - couponDiscount),
+                )
+              : "0",
+          },
+          modal: {
+            ondismiss: function () {
+              btn.classList.remove("loading");
+            },
+            confirm_close: true,
+            escape: true,
+            animation: true,
+          },
+          handler: function (response) {
+            // ── PAYMENT SUCCESS ──
+            btn.classList.remove("loading");
+            showSuccess(response);
+            /*
+        TODO (Backend): After receiving handler callback, send to your Django server:
+          POST /api/verify-payment/
+          { razorpay_payment_id, razorpay_order_id, razorpay_signature }
+        Server verifies HMAC signature and grants course access.
+      */
+          },
+        };
+
+        // ── Launch Razorpay ──
+        try {
+          const rzp = new Razorpay(options);
+          rzp.on("payment.failed", function (resp) {
+            btn.classList.remove("loading");
+            alert(
+              `Payment Failed!\nError: ${resp.error.description}\nCode: ${resp.error.code}`,
+            );
+          });
+          rzp.open();
+        } catch (e) {
+          btn.classList.remove("loading");
+          alert(
+            "Could not load Razorpay. Please check your internet connection.\n\n(Dev note: ensure Razorpay Key ID is valid)",
+          );
+          console.error("Razorpay error:", e);
+        }
+      }
+
+      /* ─────────────────────────────────────────
+   SHOW SUCCESS
+   ───────────────────────────────────────── */
+      function showSuccess(response) {
+        const due = getDueAmountPaise() / 100;
+        document.getElementById("paidAmount").textContent =
+          `₹${due.toFixed(2)}`;
+        document.getElementById("paymentId").textContent =
+          response.razorpay_payment_id || "N/A";
+        document.getElementById("orderId").textContent =
+          response.razorpay_order_id || "N/A";
+        document.getElementById("successOverlay").classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      /* ─────────────────────────────────────────
+   PRINT / DOWNLOAD RECEIPT
+   ───────────────────────────────────────── */
+      function printReceipt() {
+        const pid = document.getElementById("paymentId").textContent;
+        const amt = document.getElementById("paidAmount").textContent;
+        const blob = new Blob(
+          [
+            `MicroLearn - Payment Receipt\n` +
+              `================================\n` +
+              `Course: ${COURSE_TITLE}\n` +
+              `Amount Paid: ${amt}\n` +
+              `Payment ID: ${pid}\n` +
+              `Date: ${new Date().toLocaleString("en-IN")}\n` +
+              `================================\n` +
+              `Thank you for learning with MicroLearn!\n`,
+          ],
+          { type: "text/plain" },
+        );
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `microlearn_receipt_${pid}.txt`;
+        link.click();
+      }
+
+      /* ─────────────────────────────────────────
+   INPUT FORMATTERS
+   ───────────────────────────────────────── */
+      function fmtCard(el) {
+        let v = el.value.replace(/\D/g, "").slice(0, 16);
+        el.value = v.replace(/(.{4})/g, "$1 ").trim();
+      }
+      function fmtExpiry(el) {
+        let v = el.value.replace(/\D/g, "").slice(0, 4);
+        if (v.length >= 3) v = v.slice(0, 2) + " / " + v.slice(2);
+        el.value = v;
+      }
+      function goToAcknowledgement() {
+        if (!validateForm()) return;
+
+        window.location.href = "acknowledgment.html";
+      }
+
+      /* ─────────────────────────────────────────
+      
+   INIT
+   ───────────────────────────────────────── */
+      document.addEventListener("DOMContentLoaded", () => {
+        recalcTotal();
+
+        // Real-time clear errors
+        ["fullName", "email", "phone"].forEach((id) => {
+          document.getElementById(id).addEventListener("input", () => {
+            document
+              .querySelectorAll(".field-row.has-error")
+              .forEach((r) => r.classList.remove("has-error"));
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

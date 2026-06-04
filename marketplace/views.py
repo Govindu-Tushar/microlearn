@@ -20,5 +20,11 @@ def student_dashboard(request):
 def instructor_dashboard(request):
     return render(request, 'marketplace/instructor_dashboard.html')
 
+def payment(request):
+    return render(request, 'marketplace/payment.html')
 
+
+
+def acknowledgment(request):
+    return render(request, 'marketplace/acknowledgment.html')
 

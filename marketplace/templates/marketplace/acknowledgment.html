@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Successful – MicroLearn</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #faf8f4;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --teal-light: #f0fdfa;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --success: #16a34a;
+        --success-light: #f0fdf4;
+        --success-border: #bbf7d0;
+        --radius: 16px;
+        --radius-sm: 10px;
+        --shadow: 0 2px 20px rgba(13, 13, 13, 0.07);
+        --shadow-lg: 0 12px 48px rgba(13, 13, 13, 0.13);
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* ── TOPBAR ── */
+      .topbar {
+        background: rgba(250, 248, 244, 0.96);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.7rem 0;
+      }
+      .brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .brand span {
+        color: var(--saffron);
+      }
+      .steps-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .step-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.62rem;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .step.done .step-dot {
+        background: var(--success);
+        color: #fff;
+      }
+      .step.done {
+        color: var(--success);
+      }
+      .step-divider {
+        width: 28px;
+        height: 2px;
+        background: var(--success);
+        border-radius: 2px;
+      }
+
+      /* ── CONFETTI CANVAS ── */
+      #confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── PAGE WRAPPER ── */
+      .page {
+        position: relative;
+        z-index: 1;
+        padding: 3rem 1rem 4rem;
+      }
+
+      /* ── SUCCESS HERO ── */
+      .success-hero {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      .checkmark-ring {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: var(--success-light);
+        border: 3px solid var(--success-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .checkmark-ring i {
+        font-size: 2.6rem;
+        color: var(--success);
+        animation: fadeIn 0.3s 0.4s ease both;
+      }
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .success-title {
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        animation: slideUp 0.5s 0.15s ease both;
+      }
+      .success-subtitle {
+        color: var(--muted);
+        font-size: 0.97rem;
+        margin-top: 0.4rem;
+        animation: slideUp 0.5s 0.25s ease both;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .success-amount-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--success-light);
+        border: 1.5px solid var(--success-border);
+        border-radius: 50px;
+        padding: 0.45rem 1.2rem;
+        margin-top: 1rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--success);
+        animation: slideUp 0.5s 0.35s ease both;
+      }
+
+      /* ── MAIN CARD ── */
+      .ack-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        max-width: 780px;
+        margin: 0 auto;
+        box-shadow: var(--shadow-lg);
+        animation: slideUp 0.5s 0.2s ease both;
+      }
+
+      /* ── RECEIPT SECTION ── */
+      .receipt-header {
+        background: var(--success);
+        color: #fff;
+        padding: 1.1rem 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .receipt-header h2 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin: 0;
+        color: #fff;
+      }
+      .receipt-id {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: monospace;
+      }
+
+      .receipt-body {
+        padding: 1.6rem;
+      }
+
+      /* COURSE ROW */
+      .course-row {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        padding-bottom: 1.4rem;
+        margin-bottom: 1.4rem;
+        border-bottom: 1px dashed var(--border);
+      }
+      .course-thumb {
+        width: 80px;
+        height: 60px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .course-title-main {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+      .course-meta {
+        font-size: 0.77rem;
+        color: var(--muted);
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.35rem;
+      }
+      .course-badges {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      .cbadge {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.18rem 0.5rem;
+        border-radius: 5px;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+      }
+      .cbadge-teal {
+        background: var(--teal-light);
+        color: var(--teal);
+      }
+      .cbadge-warn {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+      .cbadge-green {
+        background: var(--success-light);
+        color: var(--success);
+      }
+
+      /* TRANSACTION DETAILS GRID */
+      .txn-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.1rem;
+        margin-bottom: 1.4rem;
+      }
+      @media (max-width: 540px) {
+        .txn-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .txn-cell {
+        padding: 0.6rem 0;
+      }
+      .txn-cell:nth-child(odd) {
+        border-right: 1px solid var(--border);
+        padding-right: 1rem;
+      }
+      .txn-cell:nth-child(even) {
+        padding-left: 1rem;
+      }
+      .txn-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.2rem;
+      }
+      .txn-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink);
+        word-break: break-all;
+      }
+      .txn-value.mono {
+        font-family: monospace;
+        font-size: 0.82rem;
+        color: var(--ink);
+      }
+      .txn-value.success {
+        color: var(--success);
+      }
+      .txn-value.amount {
+        font-family: "Syne", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--success);
+      }
+
+      /* PRICE BREAKDOWN */
+      .breakdown-section {
+        margin-bottom: 1.4rem;
+      }
+      .breakdown-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .breakdown-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.87rem;
+        padding: 0.32rem 0;
+      }
+      .breakdown-row .bl {
+        color: var(--muted);
+      }
+      .breakdown-row.strike .br {
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .breakdown-row.discount .br {
+        color: var(--success);
+        font-weight: 600;
+      }
+      .breakdown-row.total {
+        border-top: 2px solid var(--border);
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+      }
+      .breakdown-row.total .bl {
+        color: var(--ink);
+      }
+      .breakdown-row.total .br {
+        color: var(--success);
+        font-size: 1.1rem;
+      }
+      .saved-banner {
+        background: var(--success-light);
+        border: 1px solid var(--success-border);
+        border-radius: var(--radius-sm);
+        padding: 0.7rem 1rem;
+        margin-top: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--success);
+      }
+
+      /* DIVIDER */
+      .divider-dash {
+        border: none;
+        border-top: 1px dashed var(--border);
+        margin: 1.4rem 0;
+      }
+
+      /* ACCESS GRANTED */
+      .access-section {
+      }
+      .access-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.85rem;
+      }
+      .access-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.88rem;
+      }
+      .access-item:last-child {
+        border: none;
+      }
+      .access-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+      }
+      .access-label {
+        font-weight: 500;
+        flex: 1;
+      }
+      .access-check {
+        color: var(--success);
+        font-size: 1rem;
+      }
+
+      /* CTA BUTTONS */
+      .cta-section {
+        padding: 1.4rem 1.6rem;
+        background: var(--paper);
+        border-top: 1px solid var(--border);
+      }
+      .btn-start {
+        display: block;
+        width: 100%;
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.85rem;
+        text-align: center;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.97rem;
+        text-decoration: none;
+        transition: 0.18s;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .btn-start:hover {
+        background: var(--saffron-dark);
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
+      }
+      .btn-secondary-row {
+        display: flex;
+        gap: 0.65rem;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .btn-sec {
+        flex: 1;
+        min-width: 130px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        border-radius: 50px;
+        padding: 0.62rem 0.8rem;
+        text-align: center;
+        font-size: 0.83rem;
+        font-weight: 600;
+        color: var(--ink);
+        text-decoration: none;
+        transition: 0.15s;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+      }
+      .btn-sec:hover {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #fff;
+      }
+
+      /* DOWNLOAD RECEIPT BTN */
+      .btn-receipt-dl {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: 0.15s;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .btn-receipt-dl:hover {
+        color: var(--saffron);
+      }
+
+      /* WHAT'S NEXT TIMELINE */
+      .timeline {
+        padding: 0;
+        list-style: none;
+      }
+      .timeline-item {
+        display: flex;
+        gap: 1rem;
+        padding-bottom: 1.2rem;
+        position: relative;
+      }
+      .timeline-item:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        left: 17px;
+        top: 36px;
+        width: 2px;
+        height: calc(100% - 20px);
+        background: var(--border);
+      }
+      .tl-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        z-index: 1;
+      }
+      .tl-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        margin-bottom: 0.2rem;
+      }
+      .tl-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      /* SHARE */
+      .share-section {
+        max-width: 780px;
+        margin: 1.5rem auto 0;
+      }
+      .share-card {
+        background: var(--ink);
+        border-radius: var(--radius);
+        padding: 1.5rem 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .share-text h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.25rem;
+      }
+      .share-text p {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0;
+      }
+      .share-btns {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .share-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        border-radius: 50px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+        text-decoration: none;
+      }
+      .share-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+      }
+      .share-btn.whatsapp:hover {
+        background: #25d366;
+        border-color: #25d366;
+      }
+      .share-btn.twitter:hover {
+        background: #1da1f2;
+        border-color: #1da1f2;
+      }
+      .share-btn.linkedin:hover {
+        background: #0a66c2;
+        border-color: #0a66c2;
+      }
+
+      /* FOOTER NOTE */
+      .footer-note {
+        max-width: 780px;
+        margin: 1.5rem auto 0;
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .footer-note a {
+        color: var(--saffron);
+        text-decoration: none;
+      }
+
+      /* PRINT STYLES */
+      @media print {
+        .cta-section,
+        .share-section,
+        .topbar,
+        #confetti {
+          display: none !important;
+        }
+        .ack-card {
+          box-shadow: none;
+          border: 1px solid #ccc;
+        }
+        body {
+          background: #fff;
+        }
+      }
+
+      /* MOBILE */
+      @media (max-width: 600px) {
+        .receipt-body {
+          padding: 1.1rem;
+        }
+        .course-thumb {
+          width: 60px;
+          height: 48px;
+          font-size: 1.5rem;
+        }
+        .txn-cell:nth-child(odd) {
+          border-right: none;
+          padding-right: 0;
+        }
+        .txn-cell:nth-child(even) {
+          padding-left: 0;
+        }
+        .txn-grid {
+          border-top: 1px solid var(--border);
+        }
+        .txn-cell {
+          border-bottom: 1px solid var(--border);
+          padding: 0.5rem 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- CONFETTI CANVAS -->
+    <canvas id="confetti"></canvas>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+      <div class="container">
+        <div
+          class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+        >
+          <a class="brand" href="index.html">Micro<span>Learn</span></a>
+          <div class="steps-bar d-none d-sm-flex">
+            <div class="step done">
+              <div class="step-dot">
+                <i class="bi bi-check" style="font-size: 0.6rem"></i>
+              </div>
+              <span>Cart</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step done">
+              <div class="step-dot">
+                <i class="bi bi-check" style="font-size: 0.6rem"></i>
+              </div>
+              <span>Checkout</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step done">
+              <div class="step-dot">
+                <i class="bi bi-check" style="font-size: 0.6rem"></i>
+              </div>
+              <span>Confirmed</span>
+            </div>
+          </div>
+          <a
+            href="student_dashboard.html"
+            style="
+              font-size: 0.82rem;
+              font-weight: 600;
+              color: var(--muted);
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 0.3rem;
+            "
+          >
+            <i class="bi bi-grid-1x2"></i> My Dashboard
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGE -->
+    <div class="page">
+      <div class="container">
+        <!-- HERO -->
+        <div class="success-hero">
+          <div class="checkmark-ring">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <h1 class="success-title">Payment Successful! 🎉</h1>
+          <p class="success-subtitle">
+            Your course has been unlocked. Time to start learning!
+          </p>
+          <div class="success-amount-pill">
+            <i class="bi bi-shield-check-fill"></i>
+            ₹0.00 paid · Covered by wallet balance
+          </div>
+        </div>
+
+        <!-- MAIN ACK CARD -->
+        <div class="ack-card">
+          <!-- RECEIPT HEADER -->
+          <div class="receipt-header">
+            <div>
+              <h2><i class="bi bi-receipt me-2"></i>Payment Receipt</h2>
+              <div class="receipt-id">Receipt #ML-20241217-00847</div>
+            </div>
+            <button
+              class="btn-receipt-dl"
+              style="
+                color: rgba(255, 255, 255, 0.75);
+                text-decoration-color: rgba(255, 255, 255, 0.4);
+              "
+              onclick="downloadReceipt()"
+            >
+              <i class="bi bi-download"></i> Download PDF
+            </button>
+          </div>
+
+          <div class="receipt-body">
+            <!-- COURSE -->
+            <div class="course-row">
+              <div
+                class="course-thumb"
+                style="background: linear-gradient(135deg, #fef3c7, #fed7aa)"
+              >
+                🐍
+              </div>
+              <div>
+                <div class="course-title-main">Python Basics in 2 Hours</div>
+                <div class="course-meta">
+                  <span><i class="bi bi-person me-1"></i>Rahul Sharma</span>
+                  <span
+                    ><i class="bi bi-clock me-1"></i>2.5 hrs · 12 lessons</span
+                  >
+                  <span
+                    ><i class="bi bi-translate me-1"></i>Hindi + English</span
+                  >
+                </div>
+                <div class="course-badges">
+                  <span class="cbadge cbadge-teal">Technology</span>
+                  <span class="cbadge cbadge-warn">Beginner</span>
+                  <span class="cbadge cbadge-green">Certificate Included</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRANSACTION DETAILS GRID -->
+            <div class="txn-grid">
+              <div class="txn-cell">
+                <div class="txn-label">Payment Status</div>
+                <div class="txn-value success">
+                  <i class="bi bi-check-circle-fill me-1"></i>Success
+                </div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Amount Paid</div>
+                <div class="txn-value amount" id="displayAmount">₹0.00</div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Payment ID</div>
+                <div class="txn-value mono" id="displayPaymentId">
+                  WALLET_PAY
+                </div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Order ID</div>
+                <div class="txn-value mono" id="displayOrderId">
+                  ML_1734432000000
+                </div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Payment Method</div>
+                <div class="txn-value" id="displayMethod">
+                  MicroLearn Wallet
+                </div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Date &amp; Time</div>
+                <div class="txn-value" id="displayDate">–</div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Student Name</div>
+                <div class="txn-value" id="displayName">Ravi Kumar</div>
+              </div>
+              <div class="txn-cell">
+                <div class="txn-label">Email</div>
+                <div class="txn-value" id="displayEmail">ravi@example.com</div>
+              </div>
+            </div>
+
+            <div class="divider-dash"></div>
+
+            <!-- PRICE BREAKDOWN -->
+            <div class="breakdown-section">
+              <div class="breakdown-title">
+                <i class="bi bi-receipt"></i> Price Breakdown
+              </div>
+              <div class="breakdown-row">
+                <span class="bl">Course MRP</span
+                ><span
+                  class="br strike"
+                  style="text-decoration: line-through; color: var(--muted)"
+                  >₹499.00</span
+                >
+              </div>
+              <div class="breakdown-row discount">
+                <span class="bl">MicroLearn Discount (98%)</span
+                ><span class="br">–₹492.00</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="bl">Course Price</span
+                ><span class="br">₹7.00</span>
+              </div>
+              <div class="breakdown-row discount" id="walletRow">
+                <span class="bl">Wallet Credit Applied</span
+                ><span class="br">–₹7.00</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="bl">GST / Tax</span
+                ><span class="br"
+                  >₹0.00
+                  <span style="font-size: 0.72rem; color: var(--muted)"
+                    >(included)</span
+                  ></span
+                >
+              </div>
+              <div class="breakdown-row total">
+                <span class="bl">Total Paid</span>
+                <span class="br">₹0.00</span>
+              </div>
+              <div class="saved-banner">
+                <i class="bi bi-emoji-laughing-fill"></i>
+                You saved <strong>₹499</strong> on this course — that's a 98%
+                discount!
+              </div>
+            </div>
+
+            <div class="divider-dash"></div>
+
+            <!-- ACCESS GRANTED -->
+            <div class="access-section">
+              <div class="access-title">
+                <i class="bi bi-unlock-fill me-1"></i> Access Granted
+              </div>
+              <div class="access-item">
+                <div
+                  class="access-icon"
+                  style="background: var(--saffron-light)"
+                >
+                  <i
+                    class="bi bi-play-circle-fill"
+                    style="color: var(--saffron)"
+                  ></i>
+                </div>
+                <span class="access-label"
+                  >HD Video Lessons (12 lessons · 2.5 hrs)</span
+                >
+                <i class="bi bi-check-circle-fill access-check"></i>
+              </div>
+              <div class="access-item">
+                <div class="access-icon" style="background: #fef9c3">
+                  <i class="bi bi-award-fill" style="color: #ca8a04"></i>
+                </div>
+                <span class="access-label"
+                  >Completion Certificate (shareable)</span
+                >
+                <i class="bi bi-check-circle-fill access-check"></i>
+              </div>
+              <div class="access-item">
+                <div class="access-icon" style="background: var(--teal-light)">
+                  <i class="bi bi-phone-fill" style="color: var(--teal)"></i>
+                </div>
+                <span class="access-label"
+                  >Mobile + Desktop Access (lifetime)</span
+                >
+                <i class="bi bi-check-circle-fill access-check"></i>
+              </div>
+              <div class="access-item">
+                <div class="access-icon" style="background: #f3e8ff">
+                  <i class="bi bi-download" style="color: #7c3aed"></i>
+                </div>
+                <span class="access-label"
+                  >Downloadable Resources &amp; Code Files</span
+                >
+                <i class="bi bi-check-circle-fill access-check"></i>
+              </div>
+              <div class="access-item">
+                <div class="access-icon" style="background: #fef2f2">
+                  <i class="bi bi-headset" style="color: #dc2626"></i>
+                </div>
+                <span class="access-label">Instructor Q&amp;A Support</span>
+                <i class="bi bi-check-circle-fill access-check"></i>
+              </div>
+            </div>
+          </div>
+          <!-- /receipt-body -->
+
+          <!-- CTA -->
+          <div class="cta-section">
+            <a href="student_dashboard.html" class="btn-start">
+              <i class="bi bi-play-circle-fill"></i> Start Learning Now
+            </a>
+            <div class="btn-secondary-row">
+              <button class="btn-sec" onclick="downloadReceipt()">
+                <i class="bi bi-download"></i> Download Receipt
+              </button>
+              <a class="btn-sec" href="marketplace.html"
+                ><i class="bi bi-grid"></i> Browse More Courses</a
+              >
+              <a class="btn-sec" href="student_dashboard.html"
+                ><i class="bi bi-speedometer2"></i> Dashboard</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- /ack-card -->
+
+        <!-- WHAT'S NEXT -->
+        <div style="max-width: 780px; margin: 2rem auto 0">
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 1.2rem">
+            What happens next?
+          </h3>
+          <ul class="timeline">
+            <li class="timeline-item">
+              <div
+                class="tl-dot"
+                style="
+                  background: var(--success-light);
+                  border: 2px solid var(--success-border);
+                "
+              >
+                ✅
+              </div>
+              <div>
+                <div class="tl-title">Access Unlocked Instantly</div>
+                <div class="tl-desc">
+                  Your course is live in your dashboard right now. No waiting,
+                  no approval needed.
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div
+                class="tl-dot"
+                style="background: #fef9c3; border: 2px solid #fde68a"
+              >
+                📧
+              </div>
+              <div>
+                <div class="tl-title">Email Confirmation Sent</div>
+                <div class="tl-desc">
+                  A receipt and course access link has been sent to
+                  <strong id="emailConfirm">ravi@example.com</strong>. Check
+                  spam if you don't see it.
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div
+                class="tl-dot"
+                style="
+                  background: var(--saffron-light);
+                  border: 2px solid rgba(249, 115, 22, 0.25);
+                "
+              >
+                ▶️
+              </div>
+              <div>
+                <div class="tl-title">Watch &amp; Learn at Your Pace</div>
+                <div class="tl-desc">
+                  2.5 hours of HD content. Pause, rewind, rewatch — forever.
+                  Works on any device.
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div
+                class="tl-dot"
+                style="background: #f3e8ff; border: 2px solid #e9d5ff"
+              >
+                🏆
+              </div>
+              <div>
+                <div class="tl-title">Earn Your Certificate</div>
+                <div class="tl-desc">
+                  Complete all lessons to unlock your shareable certificate. Add
+                  it to LinkedIn or your resume.
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- SHARE -->
+        <div class="share-section">
+          <div class="share-card">
+            <div class="share-text">
+              <h3>Tell your friends about MicroLearn!</h3>
+              <p>Share and earn ₹5 wallet credit per successful referral 🎁</p>
+            </div>
+            <div class="share-btns">
+              <a
+                class="share-btn whatsapp"
+                href="https://wa.me/?text=I%20just%20enrolled%20in%20a%20Python%20course%20for%20just%20%E2%82%B97%20on%20MicroLearn!%20Check%20it%20out%20%F0%9F%90%8D%20https://microlearn.in"
+                target="_blank"
+              >
+                <i class="bi bi-whatsapp"></i> WhatsApp
+              </a>
+              <a
+                class="share-btn twitter"
+                href="https://twitter.com/intent/tweet?text=Just%20bought%20a%20Python%20course%20for%20only%20%E2%82%B97%20on%20%40MicroLearnIN!%20Affordable%20learning%20for%20everyone%20%F0%9F%9A%80&url=https://microlearn.in"
+                target="_blank"
+              >
+                <i class="bi bi-twitter-x"></i> Twitter
+              </a>
+              <a
+                class="share-btn linkedin"
+                href="https://www.linkedin.com/sharing/share-offsite/?url=https://microlearn.in"
+                target="_blank"
+              >
+                <i class="bi bi-linkedin"></i> LinkedIn
+              </a>
+              <button class="share-btn" onclick="copyLink()">
+                <i class="bi bi-link-45deg"></i>
+                <span id="copyLabel">Copy Link</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER NOTE -->
+        <div class="footer-note mt-3 pb-4">
+          Questions? <a href="#">Contact Support</a> &nbsp;·&nbsp;
+          <a href="#">Refund Policy</a> &nbsp;·&nbsp;
+          <a href="#">Privacy Policy</a>
+          <br /><span style="margin-top: 0.4rem; display: block"
+            >© 2025 MicroLearn · All prices in INR · GST included</span
+          >
+        </div>
+      </div>
+    </div>
+    <!-- /page -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      /* ─────────────────────────────
+   POPULATE FROM URL PARAMS
+   (Razorpay redirects with ?payment_id=&order_id= etc.)
+   ───────────────────────────── */
+      function getParam(key) {
+        return new URLSearchParams(window.location.search).get(key) || null;
+      }
+
+      function populatePage() {
+        const paymentId =
+          getParam("payment_id") ||
+          getParam("razorpay_payment_id") ||
+          "WALLET_PAY";
+        const orderId =
+          getParam("order_id") ||
+          getParam("razorpay_order_id") ||
+          "ML_" + Date.now();
+        const amount = getParam("amount") || "0"; // in paise or INR string
+        const method = getParam("method") || "MicroLearn Wallet";
+        const name = getParam("name") || "Ravi Kumar";
+        const email = getParam("email") || "ravi@example.com";
+
+        // Amount: handle both paise (integer) and INR (float string)
+        const amountINR =
+          parseFloat(amount) > 100
+            ? (parseFloat(amount) / 100).toFixed(2) // paise → INR
+            : parseFloat(amount).toFixed(2); // already INR
+
+        // Inject into DOM
+        document.getElementById("displayPaymentId").textContent = paymentId;
+        document.getElementById("displayOrderId").textContent = orderId;
+        document.getElementById("displayAmount").textContent = `₹${amountINR}`;
+        document.getElementById("displayMethod").textContent =
+          capitalise(method);
+        document.getElementById("displayName").textContent = name;
+        document.getElementById("displayEmail").textContent = email;
+        document.getElementById("emailConfirm").textContent = email;
+        document.getElementById("displayDate").textContent =
+          new Date().toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+        // Update amount pill hero
+        document.querySelector(".success-amount-pill").innerHTML =
+          `<i class="bi bi-shield-check-fill"></i> ₹${amountINR} paid · ${capitalise(method)}`;
+
+        // Update breakdown total
+        document.querySelector(".breakdown-row.total .br").textContent =
+          `₹${amountINR}`;
+
+        // Receipt ID
+        document.querySelector(".receipt-id").textContent =
+          `Receipt #ML-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${Math.floor(Math.random() * 90000 + 10000)}`;
+
+        // Hide wallet row if not wallet pay
+        if (!method.toLowerCase().includes("wallet")) {
+          const wRow = document.getElementById("walletRow");
+          if (wRow) wRow.style.display = "none";
+          document.querySelector(".breakdown-row.total .br").textContent =
+            `₹${amountINR}`;
+        }
+      }
+
+      function capitalise(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
+      }
+
+      /* ─────────────────────────────
+   RECEIPT DOWNLOAD
+   ───────────────────────────── */
+      function downloadReceipt() {
+        const pid = document.getElementById("displayPaymentId").textContent;
+        const oid = document.getElementById("displayOrderId").textContent;
+        const amt = document.getElementById("displayAmount").textContent;
+        const name = document.getElementById("displayName").textContent;
+        const email = document.getElementById("displayEmail").textContent;
+        const date = document.getElementById("displayDate").textContent;
+        const meth = document.getElementById("displayMethod").textContent;
+
+        const text = `════════════════════════════════════════
+         MICROLEARN - PAYMENT RECEIPT
+════════════════════════════════════════
+
+  Receipt #ML-${Date.now()}
+  Date     : ${date}
+
+────────────────────────────────────────
+  STUDENT
+────────────────────────────────────────
+  Name   : ${name}
+  Email  : ${email}
+
+────────────────────────────────────────
+  COURSE PURCHASED
+────────────────────────────────────────
+  Title    : Python Basics in 2 Hours
+  Category : Technology (Beginner)
+  Duration : 2.5 hours · 12 lessons
+  Access   : Lifetime
+
+────────────────────────────────────────
+  PAYMENT DETAILS
+────────────────────────────────────────
+  Payment ID : ${pid}
+  Order ID   : ${oid}
+  Method     : ${meth}
+  MRP        : ₹499.00
+  Discount   : –₹492.00 (98% off)
+  Wallet     : –₹7.00
+  GST        : ₹0.00 (included)
+  ─────────────────────────────────────
+  TOTAL PAID : ${amt}
+
+════════════════════════════════════════
+  Thank you for learning with MicroLearn!
+  Support: support@microlearn.in
+  Website: https://microlearn.in
+════════════════════════════════════════
+`;
+
+        const blob = new Blob([text], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `MicroLearn_Receipt_${pid}.txt`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      /* ─────────────────────────────
+   COPY REFERRAL LINK
+   ───────────────────────────── */
+      function copyLink() {
+        navigator.clipboard
+          .writeText("https://microlearn.in?ref=ravi123")
+          .then(() => {
+            const el = document.getElementById("copyLabel");
+            el.textContent = "Copied!";
+            setTimeout(() => (el.textContent = "Copy Link"), 2000);
+          });
+      }
+
+      /* ─────────────────────────────
+   CONFETTI
+   ───────────────────────────── */
+      (function initConfetti() {
+        const canvas = document.getElementById("confetti");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const COLORS = [
+          "#f97316",
+          "#0d9488",
+          "#f59e0b",
+          "#16a34a",
+          "#3b82f6",
+          "#ec4899",
+          "#a855f7",
+        ];
+        const PIECES = 120;
+        const pieces = Array.from({ length: PIECES }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 6 + Math.random() * 8,
+          h: 10 + Math.random() * 6,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          rot: Math.random() * Math.PI * 2,
+          rotV: (Math.random() - 0.5) * 0.12,
+          vx: (Math.random() - 0.5) * 2.5,
+          vy: 2 + Math.random() * 3.5,
+          alpha: 1,
+        }));
+
+        let frame = 0;
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          pieces.forEach((p) => {
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.rotV;
+            if (frame > 120) p.alpha -= 0.006;
+          });
+          frame++;
+          if (frame < 280) requestAnimationFrame(draw);
+          else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        draw();
+
+        window.addEventListener("resize", () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        });
+      })();
+
+      /* ─────────────────────────────
+   INIT
+   ───────────────────────────── */
+      document.addEventListener("DOMContentLoaded", populatePage);
+    </script>
+  </body>
+</html>
