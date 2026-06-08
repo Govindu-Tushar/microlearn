@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -845,7 +846,7 @@
             <div class="qr-frame pulse" id="qrFrame">
               <div class="qr-scanner"></div>
               <img
-                src="supermoney.png"
+                src="{% static 'images/supermoney.png' %}"
                 alt="UPI QR Code – scan to pay"
                 id="qrImage"
               />
