@@ -28,3 +28,7 @@ def payment(request):
 def acknowledgment(request):
     return render(request, 'marketplace/acknowledgment.html')
 
+
+
+def qr_page(request):
+    return render(request, 'marketplace/qr.html')

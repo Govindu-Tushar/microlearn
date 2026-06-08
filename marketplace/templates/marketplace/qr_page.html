@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pay via UPI QR – MicroLearn</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0d0d0d;
+        --paper: #faf8f4;
+        --saffron: #f97316;
+        --saffron-dark: #c2410c;
+        --saffron-light: #fff7ed;
+        --teal: #0d9488;
+        --muted: #6b7280;
+        --border: #e5e0d8;
+        --success: #16a34a;
+        --success-light: #f0fdf4;
+        --success-border: #bbf7d0;
+        --upi-purple: #5b4fcf;
+        --upi-light: #f0eeff;
+        --radius: 18px;
+        --radius-sm: 10px;
+        --shadow: 0 4px 24px rgba(13, 13, 13, 0.09);
+        --shadow-lg: 0 16px 56px rgba(13, 13, 13, 0.14);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Syne", sans-serif;
+      }
+
+      /* ── TOPBAR ── */
+      .topbar {
+        background: rgba(250, 248, 244, 0.95);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.7rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .brand {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .brand span {
+        color: var(--saffron);
+      }
+      .secure-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: var(--success-light);
+        border: 1px solid var(--success-border);
+        border-radius: 50px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.73rem;
+        font-weight: 600;
+        color: var(--success);
+      }
+
+      /* ── PAGE GRID ── */
+      .pay-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2rem;
+        max-width: 860px;
+        margin: 2.5rem auto;
+        padding: 0 1.25rem 4rem;
+        align-items: start;
+      }
+      @media (max-width: 820px) {
+        .pay-grid {
+          grid-template-columns: 1fr;
+        }
+        .summary-col {
+          order: -1;
+        }
+      }
+
+      /* ── SHARED CARD ── */
+      .card-box {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .card-box-header {
+        padding: 1rem 1.4rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .card-box-header h2 {
+        font-size: 0.92rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .card-box-body {
+        padding: 1.5rem;
+      }
+
+      /* ── AMOUNT BADGE ── */
+      .amount-hero {
+        text-align: center;
+        padding: 1.6rem 1.4rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(135deg, var(--saffron-light) 0%, #fff 100%);
+      }
+      .amount-label {
+        font-size: 0.73rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+      }
+      .amount-value {
+        font-family: "Syne", sans-serif;
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--saffron);
+        letter-spacing: -2px;
+        line-height: 1;
+      }
+      .amount-course {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 0.35rem;
+        max-width: 280px;
+        margin-inline: auto;
+        line-height: 1.45;
+      }
+
+      /* ── QR SECTION ── */
+      .qr-section {
+        padding: 1.4rem 1.5rem;
+        text-align: center;
+      }
+
+      .qr-frame {
+        position: relative;
+        display: inline-block;
+        padding: 14px;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow:
+          0 0 0 2px var(--border),
+          var(--shadow);
+        margin-bottom: 1rem;
+      }
+      .qr-frame img {
+        display: block;
+        width: 220px;
+        height: 220px;
+        border-radius: 8px;
+      }
+      /* Animated scanner line */
+      .qr-scanner {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--saffron),
+          transparent
+        );
+        border-radius: 2px;
+        animation: scan 2.4s ease-in-out infinite;
+        box-shadow: 0 0 8px var(--saffron);
+      }
+      @keyframes scan {
+        0% {
+          top: 14px;
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          top: calc(100% - 16px);
+          opacity: 0;
+        }
+      }
+
+      /* Corner brackets */
+      .qr-frame::before,
+      .qr-frame::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-color: var(--saffron);
+        border-style: solid;
+      }
+      .qr-frame::before {
+        top: 6px;
+        left: 6px;
+        border-width: 3px 0 0 3px;
+        border-radius: 4px 0 0 0;
+      }
+      .qr-frame::after {
+        bottom: 6px;
+        right: 6px;
+        border-width: 0 3px 3px 0;
+        border-radius: 0 0 4px 0;
+      }
+
+      .qr-brand-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+      }
+      .qr-brand-row img {
+        height: 22px;
+      }
+      .upi-badge {
+        background: var(--upi-light);
+        color: var(--upi-purple);
+        border: 1px solid #c4b8f8;
+        border-radius: 50px;
+        padding: 0.22rem 0.7rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .upi-id-row {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--paper);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 0.38rem 0.9rem;
+        font-size: 0.83rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+        margin-bottom: 0.5rem;
+        position: relative;
+      }
+      .upi-id-row:hover {
+        border-color: var(--saffron);
+        background: var(--saffron-light);
+      }
+      .upi-id-row i {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .copy-tip {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--ink);
+        color: #fff;
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 0.22rem 0.6rem;
+        border-radius: 5px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.2s;
+      }
+      .copy-tip.show {
+        opacity: 1;
+      }
+
+      /* App quick-launch */
+      .app-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+      }
+      .app-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        background: #fff;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 0.55rem 0.7rem;
+        cursor: pointer;
+        transition: 0.18s;
+        text-decoration: none;
+        min-width: 60px;
+      }
+      .app-btn:hover {
+        border-color: var(--upi-purple);
+        background: var(--upi-light);
+        transform: translateY(-2px);
+      }
+      .app-btn .app-icon {
+        font-size: 1.4rem;
+      }
+      .app-btn .app-name {
+        font-size: 0.64rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* ── TIMER ── */
+      .timer-bar-wrap {
+        background: var(--paper);
+        border-radius: var(--radius-sm);
+        padding: 0.7rem 1rem;
+        margin: 0.8rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .timer-icon {
+        font-size: 1rem;
+        color: var(--saffron);
+        flex-shrink: 0;
+      }
+      .timer-label {
+        font-size: 0.78rem;
+        color: var(--muted);
+        flex: 1;
+      }
+      .timer-count {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: var(--saffron);
+        min-width: 36px;
+        text-align: right;
+      }
+      .timer-track {
+        height: 4px;
+        background: var(--border);
+        border-radius: 50px;
+        overflow: hidden;
+        margin: 0 1.5rem 0.5rem;
+      }
+      .timer-fill {
+        height: 100%;
+        background: var(--saffron);
+        border-radius: 50px;
+        transition: width 1s linear;
+      }
+
+      /* ── CONFIRM SECTION ── */
+      .confirm-section {
+        padding: 1.2rem 1.5rem 1.5rem;
+        border-top: 1px dashed var(--border);
+      }
+      .confirm-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .txn-input-wrap {
+        position: relative;
+        margin-bottom: 0.75rem;
+      }
+      .txn-input-wrap i {
+        position: absolute;
+        left: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .txn-input {
+        width: 100%;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.68rem 0.9rem 0.68rem 2.4rem;
+        font-size: 0.9rem;
+        font-family: "DM Sans", sans-serif;
+        outline: none;
+        background: #fff;
+        transition: 0.15s;
+        letter-spacing: 0.5px;
+      }
+      .txn-input:focus {
+        border-color: var(--saffron);
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      }
+      .txn-input.valid {
+        border-color: var(--success);
+        background: var(--success-light);
+      }
+      .txn-input.invalid {
+        border-color: #ef4444;
+        background: #fef2f2;
+      }
+      .txn-hint {
+        font-size: 0.73rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .txn-hint span {
+        color: var(--saffron);
+        font-weight: 600;
+      }
+
+      .btn-confirm {
+        width: 100%;
+        background: var(--success);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.82rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .btn-confirm:hover {
+        background: #15803d;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+      }
+      .btn-confirm:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .btn-confirm .spin {
+        display: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: rot 0.7s linear infinite;
+      }
+      .btn-confirm.loading .spin {
+        display: block;
+      }
+      .btn-confirm.loading .ctext {
+        opacity: 0.6;
+      }
+      @keyframes rot {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .alt-methods {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.65rem;
+      }
+      .alt-btn {
+        flex: 1;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        border-radius: 50px;
+        padding: 0.55rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--ink);
+        transition: 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+      }
+      .alt-btn:hover {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #fff;
+      }
+
+      /* ── ORDER SUMMARY (right col) ── */
+      .summary-course-row {
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        padding-bottom: 1.1rem;
+        margin-bottom: 1.1rem;
+        border-bottom: 1px dashed var(--border);
+      }
+      .s-thumb {
+        width: 68px;
+        height: 52px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        flex-shrink: 0;
+      }
+      .s-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.3;
+      }
+      .s-meta {
+        font-size: 0.73rem;
+        color: var(--muted);
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .s-rating {
+        color: #f59e0b;
+        font-size: 0.73rem;
+        font-weight: 600;
+        margin-top: 0.25rem;
+      }
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.86rem;
+        padding: 0.3rem 0;
+      }
+      .price-row .pl {
+        color: var(--muted);
+      }
+      .price-row.total {
+        border-top: 2px solid var(--border);
+        margin-top: 0.4rem;
+        padding-top: 0.7rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.98rem;
+      }
+      .price-row.discount .pr {
+        color: var(--success);
+        font-weight: 600;
+      }
+      .saving-tag {
+        background: var(--success-light);
+        border: 1px solid var(--success-border);
+        border-radius: 50px;
+        padding: 0.28rem 0.8rem;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: var(--success);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        margin-top: 0.55rem;
+      }
+      .refund-note {
+        background: var(--upi-light);
+        border: 1px solid #c4b8f8;
+        border-radius: var(--radius-sm);
+        padding: 0.7rem 0.85rem;
+        font-size: 0.76rem;
+        color: var(--upi-purple);
+        margin-top: 0.85rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+      .access-list {
+        margin-top: 1rem;
+      }
+      .access-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.82rem;
+        padding: 0.28rem 0;
+      }
+      .access-item i {
+        color: var(--success);
+        font-size: 0.85rem;
+      }
+
+      /* ── STATUS STATES ── */
+      .status-pending {
+        display: block;
+      }
+      .status-success {
+        display: none;
+      }
+      .status-failed {
+        display: none;
+      }
+
+      .success-flash {
+        text-align: center;
+        padding: 2rem 1.5rem;
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.85);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .success-flash .sicon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 0.75rem;
+      }
+      .success-flash h3 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 1.3rem;
+        margin-bottom: 0.3rem;
+      }
+      .success-flash p {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .txn-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--success-light);
+        border: 1px solid var(--success-border);
+        border-radius: 50px;
+        padding: 0.35rem 1rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--success);
+        margin: 0.75rem 0;
+      }
+      .btn-go-course {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--saffron);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 0.75rem 1.8rem;
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 0.92rem;
+        cursor: pointer;
+        transition: 0.15s;
+        text-decoration: none;
+        margin-top: 0.5rem;
+      }
+      .btn-go-course:hover {
+        background: var(--saffron-dark);
+        color: #fff;
+      }
+
+      .failed-flash {
+        text-align: center;
+        padding: 2rem 1.5rem;
+      }
+      .failed-flash .ficon {
+        font-size: 2.8rem;
+        margin-bottom: 0.75rem;
+        display: block;
+      }
+
+      /* ── STEP INDICATOR ── */
+      .step-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.75rem 0 0;
+      }
+      .step-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: 0.3s;
+      }
+      .step-dot.active {
+        background: var(--saffron);
+        width: 18px;
+        border-radius: 50px;
+      }
+      .step-dot.done {
+        background: var(--success);
+      }
+
+      /* ── ANIMATIONS ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fu {
+        animation: fadeUp 0.45s ease both;
+      }
+      .fu1 {
+        animation-delay: 0.08s;
+      }
+      .fu2 {
+        animation-delay: 0.16s;
+      }
+      .fu3 {
+        animation-delay: 0.24s;
+      }
+
+      /* pulse the QR */
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
+        }
+      }
+      .qr-frame.pulse {
+        animation: pulse 2s ease infinite;
+      }
+
+      /* ── MISC ── */
+      @media (max-width: 480px) {
+        .amount-value {
+          font-size: 2.4rem;
+        }
+        .qr-frame img {
+          width: 190px;
+          height: 190px;
+        }
+        .app-btn {
+          min-width: 52px;
+          padding: 0.45rem 0.55rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOPBAR -->
+    <nav class="topbar">
+      <div class="container">
+        <div
+          class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+        >
+          <a class="brand" href="index.html">Micro<span>Learn</span></a>
+          <div class="d-flex align-items-center gap-2">
+            <div class="secure-pill">
+              <i class="bi bi-shield-lock-fill"></i> UPI Secured
+            </div>
+            <a
+              href="payment.html"
+              style="
+                font-size: 0.8rem;
+                color: var(--muted);
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+              "
+            >
+              <i class="bi bi-arrow-left"></i> Back
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- GRID -->
+    <div class="pay-grid">
+      <!-- ── LEFT: QR CARD ── -->
+      <div class="left-col">
+        <!-- AMOUNT HERO -->
+        <div class="card-box fu mb-3">
+          <div class="amount-hero">
+            <div class="amount-label">Amount to Pay</div>
+            <div class="amount-value" id="displayAmount">₹7</div>
+            <div class="amount-course" id="displayCourse">
+              Python Basics in 2 Hours · by Rahul Sharma
+            </div>
+          </div>
+
+          <!-- QR BODY -->
+          <div class="qr-section" id="qrSection">
+            <!-- Step dots -->
+            <div class="step-dots mb-3">
+              <div class="step-dot done"></div>
+              <div class="step-dot active"></div>
+              <div class="step-dot"></div>
+            </div>
+
+            <!-- QR Frame with the uploaded QR image -->
+            <div class="qr-frame pulse" id="qrFrame">
+              <div class="qr-scanner"></div>
+              <img
+                src="/mnt/user-data/uploads/WhatsApp_Image_2026-06-08_at_1_54_18_PM.jpeg"
+                alt="UPI QR Code – scan to pay"
+                id="qrImage"
+              />
+            </div>
+
+            <!-- Branding row -->
+            <div class="qr-brand-row">
+              <span
+                style="
+                  font-size: 0.78rem;
+                  color: var(--muted);
+                  font-weight: 600;
+                "
+                >Powered by</span
+              >
+              <span
+                style="
+                  font-family: &quot;Syne&quot;, sans-serif;
+                  font-weight: 800;
+                  font-size: 0.92rem;
+                  color: var(--upi-purple);
+                "
+                >super.money</span
+              >
+              <span class="upi-badge">UPI</span>
+            </div>
+
+            <!-- UPI ID copy row -->
+            <div
+              class="upi-id-row"
+              onclick="copyUPI(this)"
+              title="Click to copy UPI ID"
+            >
+              <div class="copy-tip" id="copyTip">Copied!</div>
+              <i class="bi bi-copy"></i>
+              <span>8919450026@superyes</span>
+              <span style="font-size: 0.7rem; color: var(--muted)"
+                >(Govindu Tushar)</span
+              >
+            </div>
+
+            <div
+              style="
+                font-size: 0.72rem;
+                color: var(--muted);
+                margin-bottom: 0.9rem;
+              "
+            >
+              Or enter UPI ID manually in your app
+            </div>
+
+            <!-- App launch buttons -->
+            <div class="app-row">
+              <a
+                class="app-btn"
+                href="upi://pay?pa=8919450026@superyes&pn=GovinduTushar&am=7&cu=INR&tn=MicroLearn-PythonBasics"
+                id="gpayBtn"
+              >
+                <span class="app-icon">🟢</span>
+                <span class="app-name">GPay</span>
+              </a>
+              <a
+                class="app-btn"
+                href="phonepe://pay?pa=8919450026@superyes&pn=GovinduTushar&am=7&cu=INR&tn=MicroLearn-PythonBasics"
+                id="phonepeBtn"
+              >
+                <span class="app-icon">💜</span>
+                <span class="app-name">PhonePe</span>
+              </a>
+              <a
+                class="app-btn"
+                href="paytmmp://pay?pa=8919450026@superyes&pn=GovinduTushar&am=7&cu=INR&tn=MicroLearn-PythonBasics"
+                id="paytmBtn"
+              >
+                <span class="app-icon">🔵</span>
+                <span class="app-name">Paytm</span>
+              </a>
+              <a
+                class="app-btn"
+                href="upi://pay?pa=8919450026@superyes&pn=GovinduTushar&am=7&cu=INR&tn=MicroLearn-PythonBasics"
+              >
+                <span class="app-icon">🏦</span>
+                <span class="app-name">BHIM</span>
+              </a>
+              <a
+                class="app-btn"
+                href="upi://pay?pa=8919450026@superyes&pn=GovinduTushar&am=7&cu=INR&tn=MicroLearn-PythonBasics"
+              >
+                <span class="app-icon">📲</span>
+                <span class="app-name">Other</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- TIMER -->
+          <div class="timer-bar-wrap">
+            <i class="bi bi-clock timer-icon"></i>
+            <span class="timer-label">QR expires in</span>
+            <span class="timer-count" id="timerCount">09:59</span>
+          </div>
+          <div class="timer-track">
+            <div class="timer-fill" id="timerFill" style="width: 100%"></div>
+          </div>
+
+          <!-- CONFIRM PAYMENT -->
+          <div class="confirm-section" id="confirmSection">
+            <div class="confirm-label">
+              <i class="bi bi-check2-circle" style="color: var(--saffron)"></i>
+              Confirm Your Payment
+            </div>
+            <div class="txn-input-wrap">
+              <i class="bi bi-hash"></i>
+              <input
+                class="txn-input"
+                type="text"
+                id="txnInput"
+                placeholder="Enter UPI Transaction / Reference ID"
+                maxlength="22"
+                oninput="validateTxn(this)"
+              />
+            </div>
+            <div class="txn-hint">
+              Find your transaction ID in the payment app under recent
+              transactions. Looks like: <span>T2412171234567890</span>
+            </div>
+            <button
+              class="btn-confirm"
+              id="confirmBtn"
+              onclick="confirmPayment()"
+              disabled
+            >
+              <div class="spin"></div>
+              <span class="ctext"
+                ><i class="bi bi-patch-check-fill me-1"></i>Confirm Payment ·
+                <span id="btnAmt">₹7</span></span
+              >
+            </button>
+            <div class="alt-methods mt-2">
+              <button
+                class="alt-btn"
+                onclick="window.location.href = 'payment.html'"
+              >
+                <i class="bi bi-credit-card"></i> Pay by Card
+              </button>
+              <button
+                class="alt-btn"
+                onclick="window.location.href = 'payment.html'"
+              >
+                <i class="bi bi-phone"></i> Other UPI
+              </button>
+            </div>
+          </div>
+
+          <!-- SUCCESS STATE -->
+          <div class="status-success" id="successState">
+            <div class="success-flash">
+              <span class="sicon">🎉</span>
+              <h3>Payment Confirmed!</h3>
+              <p>Your course access is now unlocked.</p>
+              <div class="txn-badge">
+                <i class="bi bi-check-circle-fill"></i>
+                Txn ID: <span id="confirmedTxnId">–</span>
+              </div>
+              <br />
+              <a href="payment_acknowledgment.html" class="btn-go-course">
+                <i class="bi bi-play-circle-fill"></i> Start Learning
+              </a>
+            </div>
+          </div>
+
+          <!-- FAILED STATE -->
+          <div class="status-failed" id="failedState">
+            <div class="failed-flash">
+              <span class="ficon">❌</span>
+              <h3
+                style="
+                  font-family: &quot;Syne&quot;, sans-serif;
+                  font-weight: 800;
+                  font-size: 1.2rem;
+                  margin-bottom: 0.3rem;
+                "
+              >
+                Payment Not Found
+              </h3>
+              <p
+                style="
+                  color: var(--muted);
+                  font-size: 0.85rem;
+                  margin-bottom: 1.1rem;
+                "
+              >
+                We couldn't verify this transaction ID. Please check and try
+                again, or use another payment method.
+              </p>
+              <button
+                class="btn-confirm"
+                style="background: var(--saffron)"
+                onclick="resetConfirm()"
+              >
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /card-box -->
+
+        <!-- INSTRUCTIONS -->
+        <div class="card-box fu fu2">
+          <div class="card-box-header">
+            <i
+              class="bi bi-info-circle-fill"
+              style="color: var(--upi-purple)"
+            ></i>
+            <h2>How to Pay</h2>
+          </div>
+          <div class="card-box-body">
+            <div style="display: flex; flex-direction: column; gap: 0.75rem">
+              <div style="display: flex; gap: 0.9rem; align-items: flex-start">
+                <div
+                  style="
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: var(--saffron);
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                  "
+                >
+                  1
+                </div>
+                <div>
+                  <div style="font-weight: 600; font-size: 0.87rem">
+                    Open any UPI app
+                  </div>
+                  <div style="font-size: 0.76rem; color: var(--muted)">
+                    Google Pay, PhonePe, Paytm, BHIM, or your bank app
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.9rem; align-items: flex-start">
+                <div
+                  style="
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: var(--saffron);
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                  "
+                >
+                  2
+                </div>
+                <div>
+                  <div style="font-weight: 600; font-size: 0.87rem">
+                    Scan the QR code above
+                  </div>
+                  <div style="font-size: 0.76rem; color: var(--muted)">
+                    Or tap an app button to open directly
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.9rem; align-items: flex-start">
+                <div
+                  style="
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: var(--saffron);
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                  "
+                >
+                  3
+                </div>
+                <div>
+                  <div style="font-weight: 600; font-size: 0.87rem">
+                    Pay exactly
+                    <strong style="color: var(--saffron)" id="inlineAmt"
+                      >₹7</strong
+                    >
+                  </div>
+                  <div style="font-size: 0.76rem; color: var(--muted)">
+                    Amount is pre-filled. Do not change it.
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.9rem; align-items: flex-start">
+                <div
+                  style="
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: var(--saffron);
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                  "
+                >
+                  4
+                </div>
+                <div>
+                  <div style="font-weight: 600; font-size: 0.87rem">
+                    Enter your Transaction ID above
+                  </div>
+                  <div style="font-size: 0.76rem; color: var(--muted)">
+                    Copy it from your payment app's success screen
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /left-col -->
+
+      <!-- ── RIGHT: ORDER SUMMARY ── -->
+      <div class="right-col summary-col fu fu1">
+        <div class="card-box" style="position: sticky; top: 80px">
+          <div class="card-box-header">
+            <i class="bi bi-bag-check-fill" style="color: var(--saffron)"></i>
+            <h2>Order Summary</h2>
+          </div>
+          <div class="card-box-body">
+            <!-- Course -->
+            <div class="summary-course-row">
+              <div
+                class="s-thumb"
+                style="background: linear-gradient(135deg, #fef3c7, #fed7aa)"
+              >
+                🐍
+              </div>
+              <div>
+                <div class="s-title">Python Basics in 2 Hours</div>
+                <div class="s-meta">
+                  <span><i class="bi bi-person me-1"></i>Rahul Sharma</span>
+                  <span><i class="bi bi-clock me-1"></i>2.5 hrs</span>
+                </div>
+                <div class="s-rating">
+                  ★★★★★ 4.9
+                  <span style="color: var(--muted); font-weight: 400"
+                    >(2,340)</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Breakdown -->
+            <div class="price-row">
+              <span class="pl">MRP</span
+              ><span style="text-decoration: line-through; color: var(--muted)"
+                >₹499.00</span
+              >
+            </div>
+            <div class="price-row discount">
+              <span class="pl">Discount (98% off)</span
+              ><span class="pr">–₹492.00</span>
+            </div>
+            <div class="price-row">
+              <span class="pl">Course Price</span><span>₹7.00</span>
+            </div>
+            <div class="price-row">
+              <span class="pl">GST</span><span>₹0.00</span>
+            </div>
+            <div class="price-row total">
+              <span>Total</span><span style="color: var(--saffron)">₹7.00</span>
+            </div>
+            <div class="saving-tag">
+              <i class="bi bi-emoji-smile-fill"></i> Saving ₹492 today!
+            </div>
+
+            <!-- Refund note -->
+            <div class="refund-note">
+              <i
+                class="bi bi-info-circle-fill"
+                style="flex-shrink: 0; margin-top: 0.05rem"
+              ></i>
+              <span
+                >7-day money-back guarantee. Raise a refund request within 7
+                days if unsatisfied.</span
+              >
+            </div>
+
+            <!-- What you get -->
+            <div class="access-list">
+              <div
+                style="
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 1.5px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 0.5rem;
+                "
+              >
+                Included
+              </div>
+              <div class="access-item">
+                <i class="bi bi-infinity"></i> Lifetime access
+              </div>
+              <div class="access-item">
+                <i class="bi bi-award"></i> Certificate
+              </div>
+              <div class="access-item">
+                <i class="bi bi-phone"></i> Mobile + Desktop
+              </div>
+              <div class="access-item">
+                <i class="bi bi-download"></i> Downloadable resources
+              </div>
+              <div class="access-item">
+                <i class="bi bi-headset"></i> Instructor support
+              </div>
+            </div>
+
+            <!-- UPI recipient -->
+            <div
+              style="
+                margin-top: 1.1rem;
+                background: var(--paper);
+                border-radius: var(--radius-sm);
+                padding: 0.75rem 0.9rem;
+              "
+            >
+              <div
+                style="
+                  font-size: 0.7rem;
+                  font-weight: 700;
+                  letter-spacing: 1px;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 0.45rem;
+                "
+              >
+                Paying To
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.6rem">
+                <div
+                  style="
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    background: var(--upi-light);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.9rem;
+                    font-weight: 800;
+                    color: var(--upi-purple);
+                    flex-shrink: 0;
+                  "
+                >
+                  GT
+                </div>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.85rem">
+                    Govindu Tushar
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.73rem;
+                      color: var(--muted);
+                      font-family: monospace;
+                    "
+                  >
+                    8919450026@superyes
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /pay-grid -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      /* ─────────────────────────────────────────
+   CONFIG — edit per course
+   ───────────────────────────────────────── */
+      const COURSES = {
+        python_basics: {
+          title: "Python Basics in 2 Hours",
+          price: 7,
+          emoji: "🐍",
+          instructor: "Rahul Sharma",
+          upiId: "8919450026@superyes",
+          upiName: "GovinduTushar",
+          note: "MicroLearn-PythonBasics",
+        },
+        excel_pro: {
+          title: "Excel for Office Professionals",
+          price: 5,
+          emoji: "📊",
+          instructor: "Priya Nair",
+          upiId: "8919450026@superyes",
+          upiName: "GovinduTushar",
+          note: "MicroLearn-ExcelPro",
+        },
+        instagram: {
+          title: "Instagram Growth Hacks 2025",
+          price: 10,
+          emoji: "📱",
+          instructor: "Arjun Patel",
+          upiId: "8919450026@superyes",
+          upiName: "GovinduTushar",
+          note: "MicroLearn-InstagramHacks",
+        },
+      };
+
+      /* ─────────────────────────────────────────
+   INIT — read ?course= from URL
+   ───────────────────────────────────────── */
+      let activeCourse;
+      let timerSecs = 599; // 9m 59s
+      let timerInterval;
+
+      function init() {
+        const key =
+          new URLSearchParams(location.search).get("course") || "python_basics";
+        activeCourse = COURSES[key] || COURSES.python_basics;
+
+        const { title, price, instructor, upiId, upiName, note } = activeCourse;
+
+        // Update UI
+        document.getElementById("displayAmount").textContent = `₹${price}`;
+        document.getElementById("displayCourse").textContent =
+          `${title} · by ${instructor}`;
+        document.getElementById("btnAmt").textContent = `₹${price}`;
+        document.getElementById("inlineAmt").textContent = `₹${price}`;
+
+        // Update deep-link hrefs with correct amount
+        ["gpayBtn", "phonepeBtn", "paytmBtn"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.href = el.href.replace(/am=\d+/, `am=${price}`);
+        });
+        document.querySelectorAll(".app-btn").forEach((a) => {
+          if (
+            a.href.includes("upi://") ||
+            a.href.includes("phonepe://") ||
+            a.href.includes("paytmmp://")
+          ) {
+            a.href = a.href
+              .replace(/am=\d+/, `am=${price}`)
+              .replace(/pa=[^&]+/, `pa=${upiId}`)
+              .replace(/tn=[^&]+/, `tn=${note}`);
+          }
+        });
+
+        startTimer();
+      }
+
+      /* ─────────────────────────────────────────
+   COUNTDOWN TIMER
+   ───────────────────────────────────────── */
+      function startTimer() {
+        const total = timerSecs;
+        timerInterval = setInterval(() => {
+          timerSecs--;
+          if (timerSecs <= 0) {
+            clearInterval(timerInterval);
+            expireQR();
+            return;
+          }
+          const m = String(Math.floor(timerSecs / 60)).padStart(2, "0");
+          const s = String(timerSecs % 60).padStart(2, "0");
+          document.getElementById("timerCount").textContent = `${m}:${s}`;
+          document.getElementById("timerFill").style.width =
+            `${(timerSecs / total) * 100}%`;
+
+          // Turn red when < 60s
+          if (timerSecs < 60) {
+            document.getElementById("timerCount").style.color = "#dc2626";
+            document.getElementById("timerFill").style.background = "#dc2626";
+          }
+        }, 1000);
+      }
+
+      function expireQR() {
+        document.getElementById("qrFrame").style.opacity = ".35";
+        document.getElementById("qrFrame").style.filter = "grayscale(1)";
+        document.getElementById("qrFrame").classList.remove("pulse");
+        document.getElementById("timerCount").textContent = "00:00";
+        document.getElementById("confirmSection").innerHTML = `
+    <div style="text-align:center;padding:1.2rem;">
+      <div style="font-size:2rem;margin-bottom:.5rem;">⏱️</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;margin-bottom:.4rem;">QR Code Expired</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;">This QR has expired for security reasons. Click below to get a fresh one.</p>
+      <button onclick="refreshQR()" style="background:var(--saffron);color:#fff;border:none;border-radius:50px;padding:.7rem 1.8rem;font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;cursor:pointer;">
+        <i class="bi bi-arrow-clockwise me-1"></i> Refresh QR
+      </button>
+    </div>
+  `;
+      }
+
+      function refreshQR() {
+        timerSecs = 599;
+        document.getElementById("qrFrame").style.opacity = "1";
+        document.getElementById("qrFrame").style.filter = "none";
+        document.getElementById("qrFrame").classList.add("pulse");
+        document.getElementById("confirmSection").innerHTML =
+          originalConfirmHTML;
+        startTimer();
+      }
+
+      /* ─────────────────────────────────────────
+   TRANSACTION ID VALIDATION
+   ───────────────────────────────────────── */
+      function validateTxn(el) {
+        const val = el.value.trim();
+        const btn = document.getElementById("confirmBtn");
+        // UPI transaction IDs are typically 12–20 alphanumeric chars
+        const valid = /^[A-Za-z0-9]{8,22}$/.test(val);
+        el.classList.toggle("valid", valid);
+        el.classList.toggle("invalid", val.length > 3 && !valid);
+        btn.disabled = !valid;
+      }
+
+      /* ─────────────────────────────────────────
+   CONFIRM PAYMENT
+   (In production: POST txnId to Django backend
+    which verifies via Razorpay/payment provider API)
+   ───────────────────────────────────────── */
+      async function confirmPayment() {
+        const txnId = document.getElementById("txnInput").value.trim();
+        if (!txnId) return;
+
+        const btn = document.getElementById("confirmBtn");
+        btn.classList.add("loading");
+
+        // ── Simulate backend verification (replace with real fetch) ──
+        await fakeVerify(txnId);
+
+        btn.classList.remove("loading");
+      }
+
+      function fakeVerify(txnId) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            // Simulate success for any valid-format txnId
+            // In production: POST to /api/verify-upi-payment/ with txnId
+            const success = txnId.length >= 8;
+            if (success) {
+              showSuccess(txnId);
+            } else {
+              showFailed();
+            }
+            resolve();
+          }, 1800);
+        });
+      }
+
+      /* Real backend call would look like:
+async function realVerify(txnId) {
+  const res = await fetch('/api/verify-upi-payment/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+    body: JSON.stringify({ txn_id: txnId, course_id: 'python_basics', amount: activeCourse.price }),
+  });
+  const data = await res.json();
+  data.verified ? showSuccess(txnId) : showFailed();
+}
+*/
+
+      function showSuccess(txnId) {
+        clearInterval(timerInterval);
+        document.getElementById("confirmSection").style.display = "none";
+        document.getElementById("confirmedTxnId").textContent = txnId;
+
+        const state = document.getElementById("successState");
+        state.style.display = "block";
+
+        // Update step dots
+        document.querySelectorAll(".step-dot").forEach((d, i) => {
+          d.classList.remove("active");
+          d.classList.add("done");
+        });
+      }
+
+      function showFailed() {
+        document.getElementById("confirmSection").style.display = "none";
+        document.getElementById("failedState").style.display = "block";
+      }
+
+      function resetConfirm() {
+        document.getElementById("failedState").style.display = "none";
+        document.getElementById("confirmSection").style.display = "block";
+        document.getElementById("txnInput").value = "";
+        document
+          .getElementById("txnInput")
+          .classList.remove("valid", "invalid");
+        document.getElementById("confirmBtn").disabled = true;
+      }
+
+      /* ─────────────────────────────────────────
+   COPY UPI ID
+   ───────────────────────────────────────── */
+      function copyUPI(el) {
+        const upiId = "8919450026@superyes";
+        navigator.clipboard.writeText(upiId).then(() => {
+          const tip = document.getElementById("copyTip");
+          tip.classList.add("show");
+          setTimeout(() => tip.classList.remove("show"), 2000);
+        });
+      }
+
+      /* ─────────────────────────────────────────
+   SAVE CONFIRM HTML FOR REFRESH
+   ───────────────────────────────────────── */
+      let originalConfirmHTML;
+      document.addEventListener("DOMContentLoaded", () => {
+        originalConfirmHTML =
+          document.getElementById("confirmSection").innerHTML;
+        init();
+      });
+    </script>
+  </body>
+</html>
