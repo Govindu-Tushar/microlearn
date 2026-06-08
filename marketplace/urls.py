@@ -8,6 +8,6 @@ urlpatterns = [
     path('instructor-dashboard/', views.instructor_dashboard, name='instructor_dashboard'),
     path('payment/', views.payment, name="payment"),
     path('acknowledgment/', views.acknowledgment, name='acknowledgment'),
-    path('qr/', views.qr_page, name='qr_page'),
+    path('qr/', views.qr_page, name='qr'),
 ]
 
