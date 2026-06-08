@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jzr)io=12r1pjjke*t#!=%_o5m9&o$5^w-nk-0syq_g#nmt*wn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["micro-learn.onrender.com"]
 
